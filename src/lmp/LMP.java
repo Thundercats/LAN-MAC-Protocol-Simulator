@@ -1,5 +1,7 @@
 package lmp;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author firen
@@ -10,11 +12,11 @@ public class LMP {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Node aNode = new Node(NUM_OF_NODES);
+        ArrayList<Node> network = new ArrayList(); // Store the Nodes here
         
         for(int i = 0; i < NUM_OF_NODES; i++)
         {
-            aNode.clear();
+           network.add(new Node()); //Add nodes into the ArrayList
         }
         
        // aNode.transmit();
