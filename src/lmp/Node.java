@@ -6,10 +6,11 @@ package lmp;
 
 /**
  *
- * @author firen
+ * @author T-CAP
  */
 public class Node {
-    private double k;
+    private int k;
+    private static double BACKOFF_CONSTANT = 51.2; // μseconds! 
     public Node()
     {
         //Fill this in
@@ -25,6 +26,7 @@ public class Node {
     
     public double backoff()
     {
-        return k += Math.random() % 2;  
+    	k += Math.random() % 2;
+        return k*BACKOFF_CONSTANT;
     }
 }
