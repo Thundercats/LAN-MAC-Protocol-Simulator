@@ -33,9 +33,22 @@ public class Node {
         return k*BACKOFF_CONSTANT;
     }
     
-    public boolean transmit()
+    /**
+     * 
+     * @return 
+     */
+    public boolean transmit() // What are we actually transmitting?
     {
-        return true;
+        if(true)
+        {
+            clear();
+            return true;
+        }
+        else
+        {
+            backoff();
+            return false;
+        }
     }
     
     
