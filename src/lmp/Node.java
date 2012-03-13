@@ -12,6 +12,9 @@ public class Node {
     private int k;
     private static final double BACKOFF_CONSTANT = 51.2; // μseconds! 
     
+    /**
+     * Instantiate a network node
+     */
     public Node()
     {
         k=0;
@@ -26,10 +29,13 @@ public class Node {
         k=initial;
     }
     
-    
+    /**
+     * 
+     * @return 
+     */
     private double backoff()
     {
-    	k += Math.random() % 2;
+    	k += Math.random() % 2; // Randomly decides if k will be incremented or not
         return k*BACKOFF_CONSTANT;
     }
     
