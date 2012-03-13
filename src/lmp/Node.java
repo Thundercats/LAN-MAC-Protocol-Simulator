@@ -10,7 +10,8 @@ package lmp;
  */
 public class Node {
     private int k;
-    private static double BACKOFF_CONSTANT = 51.2; // μseconds! 
+    private static final double BACKOFF_CONSTANT = 51.2; // μseconds! 
+    
     public Node()
     {
         k=0;
@@ -25,14 +26,6 @@ public class Node {
         k=initial;
     }
     
-    /* *
-     * Is the transmission successful?
-     * @return 
-     */
-    public boolean isSuccessfull()
-    {
-        return true; // not actually always true
-    }
     
     private double backoff()
     {
@@ -40,6 +33,10 @@ public class Node {
         return k*BACKOFF_CONSTANT;
     }
     
+    public boolean transmit()
+    {
+        return true;
+    }
     
     
     /**
