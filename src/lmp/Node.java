@@ -13,20 +13,42 @@ public class Node {
     private static double BACKOFF_CONSTANT = 51.2; // μseconds! 
     public Node()
     {
-        //Fill this in
+        k=0;
+    }
+    /**
+     * 
+     * @param initial - In case one would want a different
+     *      initial value for k
+     */
+    public Node(int initial)
+    {
+        k=initial;
     }
     
-    /* 
+    /* *
      * Is the transmission successful?
+     * @return 
      */
     public boolean isSuccessfull()
     {
         return true; // not actually always true
     }
     
-    public double backoff()
+    private double backoff()
     {
     	k += Math.random() % 2;
         return k*BACKOFF_CONSTANT;
+    }
+    
+    
+    
+    /**
+     * 
+     * @return 
+     */
+    public boolean clear()
+    {
+        k=0;
+        return true;
     }
 }
