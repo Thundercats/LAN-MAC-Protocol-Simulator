@@ -45,12 +45,10 @@ public class Node {
     public double backoff(int k)
     {
     	int n = k; // number of collisions seen so far
-    	double delay = 0; // the delay being added
-    	k += 0 + (int)(Math.random() * ((n - 0) + 1)); // min + (mathwhatever) * ((Max - Min) + 1); 
-    												   // Randomly decides if k will be incremented or not
-    	delay = k * BACKOFF_CONSTANT;
     	
-        return delay;
+    	k += 0 + (int)(Math.random() * ((n - 0) + 1)); // min + (mathwhatever) * ((Max - Min) + 1); 
+								   // Randomly decides if k will be incremented or not    	  	
+        return k * BACKOFF_CONSTANT;
     }
     
     public void collide()
