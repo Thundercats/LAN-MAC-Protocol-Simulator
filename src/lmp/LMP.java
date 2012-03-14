@@ -14,11 +14,10 @@ public class LMP {
     
     public static int simulate(int nodes)
     {
-        ArrayList<Node> network = new ArrayList(); // Store the Nodes here
+        ArrayList<Node> network = new ArrayList<Node>(); // Store the Nodes here
         int t = 0;
-        int i;
             
-        for(i = 0; i < nodes; i++)
+        for(int i = 0; i < nodes; i++)
         {
            network.add(new Node()); //Add nodes into the ArrayList
            network.get(i).clear(); //Transmits the node we just created
@@ -29,7 +28,7 @@ public class LMP {
             int count = 1;
             //int j = -1;
             
-            for (i = 0; i < nodes; i++)
+            for (int i = 0; i < nodes; i++)
             {
                 if(network.get(i).transmit(t))
                 {
@@ -45,7 +44,7 @@ public class LMP {
             }
             else if(count > 1)
             {
-                for(i = 0; i < nodes; i++)
+                for(int i = 0; i < nodes; i++)
                 {
                     if(network.get(i).transmit(t))
                     {
@@ -63,7 +62,7 @@ public class LMP {
         int simulated = 0;
         for(int i = 0; i < 100; i++)
         {
-            simulated += simulate(1);
+            simulated += simulate(2);
         }
         
         System.out.println(simulated);
