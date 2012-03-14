@@ -39,7 +39,8 @@ public class Node {
     private int backoff(int c)
     {
     	MAX += Math.random() % 2; // Randomly decides if k will be incremented or not
-        return (int) MAX*BACKOFF_CONSTANT;
+        // Why are we returning an int?
+        return (int) MAX*BACKOFF_CONSTANT; // Yeah... this makes no sense. 
     }
     
     /**
@@ -65,7 +66,8 @@ public class Node {
      */
     public boolean clear()
     {
-        k=0;
+        //k=0;
+        MAX=0;
         return true;
     }
     public void Collide(){
