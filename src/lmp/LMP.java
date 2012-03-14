@@ -14,7 +14,7 @@ public class LMP {
     
     public static int simulate(int nodes)
     {
-        ArrayList<Node> network = new ArrayList<Node>(); // Store the Nodes here
+        ArrayList<Node> network = new ArrayList(); // Store the Nodes here
         int t = 0;
             
         for(int i = 0; i < nodes; i++)
