@@ -9,10 +9,7 @@ package lmp;
  * @author T-CAP
  */
 public class Node {
-    private int MAX = 1000;
-    private int nextAttempt; //This field is the time to wait for next 
-                            //attempt to transmit
-    private int CollisionCount; //count number of collision
+    private int k, collisionCount;
     private static final double BACKOFF_CONSTANT = 51.2; // μseconds! 
     
     /**
@@ -20,7 +17,7 @@ public class Node {
      */
     public Node()
     {
-        CollisionCount=0;
+        k=0;
     }
     /**
      * 
@@ -29,34 +26,36 @@ public class Node {
      */
     public Node(int initial)
     {
-        MAX=initial;
+        k=initial;
     }
     
     /**
      * 
      * @return 
      */
-    private int backoff(int c)
+    public double backoff()
     {
-    	MAX += Math.random() % 2; // Randomly decides if k will be incremented or not
-        // Why are we returning an int?
-        return (int) MAX*BACKOFF_CONSTANT; // Yeah... this makes no sense. 
+    	k += Math.random() % 2; // Randomly decides if k will be incremented or not
+        return k*BACKOFF_CONSTANT;
     }
     
     /**
      * 
      * @return 
      */
-    public boolean transmit(int T) // What are we actually transmitting?
+    public boolean transmit(int time) // What are we actually transmitting?
     {
-        if (T!=0){
-            nextAttempt = T;
-            return true;
-        }
-        else {
-            nextAttempt = T;
-            return false;
-        }
+//        if(true)
+//        {
+//            clear();
+//            return true;
+//        }
+//        else
+//        {
+//            backoff();
+//            return false;
+//        }
+        return k == time;
     }
     
     
@@ -66,12 +65,8 @@ public class Node {
      */
     public boolean clear()
     {
-        //k=0;
-        MAX=0;
+        k=0;
+        collisionCount = 0;
         return true;
-    }
-    public void Collide(){
-        CollisionCount++;
-        nextAttempt += 1 + backoff( CollisionCount);
     }
 }
