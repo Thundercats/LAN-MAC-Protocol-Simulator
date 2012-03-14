@@ -9,7 +9,10 @@ package lmp;
  * @author T-CAP
  */
 public class Node {
-    private int k;
+    private int MAX = 1000;
+    private int nextAttempt; //This field is the time to wait for next 
+                            //attempt to transmit
+    private int CollisionCount; //count number of collision
     private static final double BACKOFF_CONSTANT = 51.2; // μseconds! 
     
     /**
@@ -17,7 +20,7 @@ public class Node {
      */
     public Node()
     {
-        k=0;
+        CollisionCount=0;
     }
     /**
      * 
@@ -26,33 +29,31 @@ public class Node {
      */
     public Node(int initial)
     {
-        k=initial;
+        MAX=initial;
     }
     
     /**
      * 
      * @return 
      */
-    private double backoff()
+    private int backoff(int c)
     {
-    	k += Math.random() % 2; // Randomly decides if k will be incremented or not
-        return k*BACKOFF_CONSTANT;
+    	MAX += Math.random() % 2; // Randomly decides if k will be incremented or not
+        return (int) MAX*BACKOFF_CONSTANT;
     }
     
     /**
      * 
      * @return 
      */
-    public boolean transmit() // What are we actually transmitting?
+    public boolean transmit(int T) // What are we actually transmitting?
     {
-        if(true)
-        {
-            clear();
+        if (T!=0){
+            nextAttempt = T;
             return true;
         }
-        else
-        {
-            backoff();
+        else {
+            nextAttempt = T;
             return false;
         }
     }
@@ -66,5 +67,9 @@ public class Node {
     {
         k=0;
         return true;
+    }
+    public void Collide(){
+        CollisionCount++;
+        nextAttempt += 1 + backoff( CollisionCount);
     }
 }
