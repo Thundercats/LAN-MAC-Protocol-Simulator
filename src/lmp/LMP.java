@@ -63,7 +63,7 @@ public class LMP {
         int simulated = 0;
         for(int i = 0; i < 100; i++)
         {
-            simulated += simulate(2);
+            simulated += simulate(1);
         }
         
         System.out.println(simulated);
