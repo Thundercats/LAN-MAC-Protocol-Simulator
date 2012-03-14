@@ -42,18 +42,19 @@ public class Node {
      * Uses exponential backoff whenever a collision happens
      * @return the delay
      */
-    public double backoff(int numberCollision)
+    public int backoff(int numberCollision)
     {
     	int n = numberCollision; // number of collisions seen so far
     	int min = 0;
-    	double delay = 0;
-    	delay = (Math.pow(2, n)) - 1;
+    	int delay = 0;
+    	delay = (int) ((Math.pow(2, n)) - 1);
+    	//System.out.println("num of delay "  + delay);
+
     	delay += min + (int)(Math.random() * ((delay - min) + 1)); // min + (mathwhatever) * ((Max - Min) + 1); range is between 0...n
     												   // 2^k-1
 								   					   // Randomly decides if k will be incremented or not
     	
-    	System.out.println("num of delay "  + delay);
-        return delay * BACKOFF_CONSTANT;
+        return delay; //* BACKOFF_CONSTANT;
     }
     
     /**
@@ -62,8 +63,8 @@ public class Node {
     public void collide()
     {
         collisionCount++; // collision incremented, seen so far
-        System.out.println("collision count " + collisionCount);
-        k += (int) backoff(collisionCount); // our next attempt
+       // System.out.println("collision count " + collisionCount);
+        k += 1 + backoff(collisionCount); // our next attempt
     }
     
     /**
@@ -72,8 +73,8 @@ public class Node {
      */
     public boolean transmit(int time) // What are we actually transmitting?
     {
-    	System.out.println("k is  " + k);
-    	System.out.println("t is " + time);
+    	//System.out.println("k is  " + k);
+    	//System.out.println("t is " + time);
     	
         return k == time; // Very clever, but but isn't 'k' an index for determining backoff?
         				  // k is definitely the index for determining what backoff value to use

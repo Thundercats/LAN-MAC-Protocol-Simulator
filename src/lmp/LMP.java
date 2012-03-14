@@ -34,7 +34,7 @@ public class LMP {
                 if(network.get(i).transmit(t))
                 {
                     ++count;
-                    System.out.println("count is " + count);
+                    //System.out.println("count is " + count);
                 }
             }
             //System.out.println("count is " + count);
@@ -43,15 +43,15 @@ public class LMP {
                 //System.out.println("t is " + t);
                 return t;
             }
-            else if(count > 1)
+            else if(count > 1) // where collisions occurred
             {
                 for(int i = 0; i < nodes; i++)
                 {
-                	System.out.println("time is " + t);
+                	//System.out.println("time is " + t);
                 	
                     if(network.get(i).transmit(t))
                     {
-                    	System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INSIDE");
+                    	//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INSIDE");
                         network.get(i).collide();
                     }
                 }
@@ -64,11 +64,18 @@ public class LMP {
     
     public static void main(String[] args) {
         int simulated = 0;
-        for(int i = 0; i < 100; i++)
+        int runCount = 100;
+        int n = 5; // number of stations
+
+        for(int j = 1; j <= n; j++)
         {
-            simulated += simulate(2);
+        	for(int i = 0; i < runCount; i++)
+        	{
+        		simulated += simulate(j);
+        		System.out.println("");
+        	}
+        	System.out.println("Successful node #" + j + " " + simulated/1000.0);
         }
-        
-        System.out.println(simulated);
+        System.out.println("total sum: " + simulated/1000.0);
     }
 }
