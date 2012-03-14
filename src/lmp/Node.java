@@ -51,6 +51,9 @@ public class Node {
         return k * BACKOFF_CONSTANT;
     }
     
+    /**
+     * Method to be run if a collision is detected
+     */
     public void collide()
     {
         collisionCount++;
@@ -63,7 +66,7 @@ public class Node {
      */
     public boolean transmit(int time) // What are we actually transmitting?
     {
-        return k == time;
+        return k == time; // Very clever, but but isn't 'k' an index for determining backoff?
     }
     
     
