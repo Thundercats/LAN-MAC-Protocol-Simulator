@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 /**
  *
- * @author firen
+ * @author T-CAPS
  */
 public class LMP {
-    private static final int NUM_OF_NODES = 100;
+    private static final int NUM_OF_NODES = 5;
     /**
      * @param args the command line arguments
      */
@@ -17,8 +17,7 @@ public class LMP {
         for(int i = 0; i < NUM_OF_NODES; i++)
         {
            network.add(new Node()); //Add nodes into the ArrayList
+           network.get(network.size()).transmit(); //Transmits the node we just created
         }
-        
-       // aNode.transmit();
     }
 }
