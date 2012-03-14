@@ -33,10 +33,16 @@ public class Node {
      * 
      * @return 
      */
-    public double backoff()
+    public double backoff(int aNum)
     {
-    	k += Math.random() % 2; // Randomly decides if k will be incremented or not
-        return k*BACKOFF_CONSTANT;
+    	aNum += ((Math.random() * 3) + 1) % 2; // Randomly decides if k will be incremented or not
+        return aNum*BACKOFF_CONSTANT;
+    }
+    
+    public void collide()
+    {
+        collisionCount++;
+        k += backoff(collisionCount);
     }
     
     /**
@@ -45,16 +51,6 @@ public class Node {
      */
     public boolean transmit(int time) // What are we actually transmitting?
     {
-//        if(true)
-//        {
-//            clear();
-//            return true;
-//        }
-//        else
-//        {
-//            backoff();
-//            return false;
-//        }
         return k == time;
     }
     

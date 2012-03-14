@@ -21,24 +21,26 @@ public class LMP {
         for(i = 0; i < nodes; i++)
         {
            network.add(new Node()); //Add nodes into the ArrayList
-           network.get(network.size()).clear(); //Transmits the node we just created
+           network.get(i).clear(); //Transmits the node we just created
         }
         
         while(true)
         {
-            int count = 0;
-            int j = -1;
+            int count = 1;
+            //int j = -1;
             
             for (i = 0; i < nodes; i++)
             {
                 if(network.get(i).transmit(t))
                 {
-                    j = i;
                     ++count;
+                    System.out.println("count is " + count);
                 }
             }
+            //System.out.println("count is " + count);
             if(count == 1)
             {
+                //System.out.println("t is " + t);
                 return t;
             }
             else if(count > 1)
@@ -47,12 +49,13 @@ public class LMP {
                 {
                     if(network.get(i).transmit(t))
                     {
-                        network.get(i).backoff();
+                        network.get(i).collide();
                     }
                 }
             }
             
             ++t;
+           // System.out.println("here");
         }
     }
     
@@ -60,7 +63,7 @@ public class LMP {
         int simulated = 0;
         for(int i = 0; i < 100; i++)
         {
-            simulated += simulate(NUM_OF_NODES);
+            simulated += simulate(2);
         }
         
         System.out.println(simulated);
