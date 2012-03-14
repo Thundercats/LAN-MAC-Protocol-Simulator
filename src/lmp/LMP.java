@@ -14,7 +14,7 @@ public class LMP {
     
     public static int simulate(int nodes)
     {
-        ArrayList<Node> network = new ArrayList<Node>(); // Store the Nodes here
+        ArrayList<Node> network = new ArrayList(); // Store the Nodes here
         int t = 0; // initial time t is 0
             
         for(int i = 0; i < nodes; i++)
@@ -72,21 +72,18 @@ public class LMP {
     public static void main(String[] args) {
         int simulated = 0;
         int runCount = 100;
-        int n = 40; // number of stations
+        int n = 5; // number of stations
         ArrayList<Integer> avg = new ArrayList();
 
-        for(int j = 1; j <= n; j++)
-        {
         	for(int i = 0; i < runCount; i++)
         	{
-        		simulated += simulate(j);
-        		// System.out.println("Node "+j+ ", Iteration " +i+", value: " + simulate(j));
-                        System.out.println(simulate(j));
-                        avg.add(simulate(j));
+        		simulated += simulate(1);
+                        System.out.println("Each #" + i + " simulate is " + simulate(5));
+                        avg.add(simulate(5));
         	}
+                
                 System.out.println("Average: " + avg(avg));
-                System.out.println("Successful node #" + j + " " + simulated);
-        }
-        System.out.println("total sum: " + simulated);
+                //System.out.println("Successful runs " + simulated);
+                //System.out.println("total sum: " + simulated);
     }
 }
