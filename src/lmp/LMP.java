@@ -25,7 +25,7 @@ public class LMP {
         
         while(true)
         {
-            int count = 1;
+            int count = 0;
             //int j = -1;
             
             for (int i = 0; i < nodes; i++)
@@ -47,14 +47,17 @@ public class LMP {
             {
                 for(int i = 0; i < nodes; i++)
                 {
+                	System.out.println("time is " + t);
+                	
                     if(network.get(i).transmit(t))
                     {
+                    	System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INSIDE");
                         network.get(i).collide();
                     }
                 }
             }
             
-            ++t;
+            ++t; // time t is incremented
            // System.out.println("here");
         }
     }

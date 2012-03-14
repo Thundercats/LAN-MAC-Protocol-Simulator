@@ -42,14 +42,18 @@ public class Node {
      * Uses exponential backoff whenever a collision happens
      * @return the delay
      */
-    public double backoff(int k)
+    public double backoff(int numberCollision)
     {
-    	int n = k; // number of collisions seen so far
-    	
-    	k += 0 + (int)(Math.random() * ((n - 0) + 1)); // min + (mathwhatever) * ((Max - Min) + 1); range is between 0...n
+    	int n = numberCollision; // number of collisions seen so far
+    	int min = 0;
+    	double delay = 0;
+    	delay = (Math.pow(2, n)) - 1;
+    	delay += min + (int)(Math.random() * ((delay - min) + 1)); // min + (mathwhatever) * ((Max - Min) + 1); range is between 0...n
     												   // 2^k-1
-								   					   // Randomly decides if k will be incremented or not    	  	
-        return k * BACKOFF_CONSTANT;
+								   					   // Randomly decides if k will be incremented or not
+    	
+    	System.out.println("num of delay "  + delay);
+        return delay * BACKOFF_CONSTANT;
     }
     
     /**
@@ -57,8 +61,9 @@ public class Node {
      */
     public void collide()
     {
-        collisionCount++;
-        k += backoff(collisionCount);
+        collisionCount++; // collision incremented, seen so far
+        System.out.println("collision count " + collisionCount);
+        k += (int) backoff(collisionCount); // our next attempt
     }
     
     /**
@@ -67,6 +72,9 @@ public class Node {
      */
     public boolean transmit(int time) // What are we actually transmitting?
     {
+    	System.out.println("k is  " + k);
+    	System.out.println("t is " + time);
+    	
         return k == time; // Very clever, but but isn't 'k' an index for determining backoff?
         				  // k is definitely the index for determining what backoff value to use
         				  // whenever a collision happens... -Donald
@@ -79,7 +87,7 @@ public class Node {
      */
     public boolean clear()
     {
-        k=0; // sets k to 0...
+        k=0; // sets k to 0...our number of attempts
         collisionCount = 0; // sets the collisionCount to 0
         return true; 
     }
