@@ -46,8 +46,9 @@ public class Node {
     {
     	int n = k; // number of collisions seen so far
     	
-    	k += 0 + (int)(Math.random() * ((n - 0) + 1)); // min + (mathwhatever) * ((Max - Min) + 1); 
-								   // Randomly decides if k will be incremented or not    	  	
+    	k += 0 + (int)(Math.random() * ((n - 0) + 1)); // min + (mathwhatever) * ((Max - Min) + 1); range is between 0...n
+    												   // 2^k-1
+								   					   // Randomly decides if k will be incremented or not    	  	
         return k * BACKOFF_CONSTANT;
     }
     
@@ -67,6 +68,8 @@ public class Node {
     public boolean transmit(int time) // What are we actually transmitting?
     {
         return k == time; // Very clever, but but isn't 'k' an index for determining backoff?
+        				  // k is definitely the index for determining what backoff value to use
+        				  // whenever a collision happens... -Donald
     }
     
     
@@ -76,8 +79,8 @@ public class Node {
      */
     public boolean clear()
     {
-        k=0;
-        collisionCount = 0;
-        return true;
+        k=0; // sets k to 0...
+        collisionCount = 0; // sets the collisionCount to 0
+        return true; 
     }
 }

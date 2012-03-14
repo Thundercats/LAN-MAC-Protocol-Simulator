@@ -14,8 +14,8 @@ public class LMP {
     
     public static int simulate(int nodes)
     {
-        ArrayList<Node> network = new ArrayList(); // Store the Nodes here
-        int t = 0;
+        ArrayList<Node> network = new ArrayList<Node>(); // Store the Nodes here
+        int t = 0; // initial time t is 0
             
         for(int i = 0; i < nodes; i++)
         {
@@ -30,6 +30,7 @@ public class LMP {
             
             for (int i = 0; i < nodes; i++)
             {
+            	// get the node and if transmit is 
                 if(network.get(i).transmit(t))
                 {
                     ++count;
