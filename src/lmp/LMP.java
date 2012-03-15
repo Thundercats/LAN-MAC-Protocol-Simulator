@@ -63,22 +63,23 @@ public class LMP {
     }
     public static double avg(ArrayList average)
     {
-        double tot = 0;
-        for(int i=0;i<=average.size()-1;i++)
-            tot =  tot + (Integer) average.get(i);
-        return tot/average.size();
+        double total = 0;
+        for(int i = 0;i <= average.size()-1; i++)
+            total =  total + (Integer) average.get(i);
+        return total / average.size();
     }
     
     public static void main(String[] args) {
         int simulated = 0;
         int runCount = 100;
         int n = 5; // number of stations
+        int  oneRun = simulate(5);
         ArrayList<Integer> avg = new ArrayList();
-
+        
         	for(int i = 0; i < runCount; i++)
         	{
-        		simulated += simulate(1);
-                        System.out.println("Each #" + i + " simulate is " + simulate(5));
+        		//simulated += simulate(1);
+                        System.out.println("Attempt #" + i + " simulate is " + oneRun);
                         avg.add(simulate(5));
         	}
                 
