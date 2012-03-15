@@ -12,9 +12,10 @@ public class LMP {
      * @param args the command line arguments
      */
     
-    public static int simulate(int nodes)
+    public static ArrayList simulate(int nodes)
     {
         ArrayList<Node> network = new ArrayList(); // Store the Nodes here
+        ArrayList<Integer> results = new ArrayList(); // Store the results
         int t = 0; // initial time t is 0
             
         for(int i = 0; i < nodes; i++)
@@ -23,7 +24,7 @@ public class LMP {
            network.get(i).clear(); //Transmits the node we just created
         }
         
-        while(true)
+        while(results.size()<nodes)
         {
             int count = 0;
             //int j = -1;
@@ -38,10 +39,11 @@ public class LMP {
                 }
             }
             //System.out.println("count is " + count);
-            if(count == 1)
+            if(count == 1) // Successful Transmission
             {
                 //System.out.println("t is " + t);
-                return t;
+                // return t;
+                results.add(t); //Store the time
             }
             else if(count > 1) // where collisions occurred
             {
@@ -60,6 +62,7 @@ public class LMP {
             ++t; // time t is incremented
            // System.out.println("here");
         }
+        return results; // Return the results
     }
     public static double avg(ArrayList average)
     {
@@ -73,17 +76,21 @@ public class LMP {
         int simulated = 0;
         int runCount = 100;
         int n = 5; // number of stations
-        int  oneRun = simulate(5);
+        // ArrayList  oneRun = simulate(5);
         ArrayList<Integer> avg = new ArrayList();
         
         	for(int i = 0; i < runCount; i++)
         	{
+                    ArrayList  oneRun = simulate(5);
         		//simulated += simulate(1);
-                        System.out.println("Attempt #" + i + " simulate is " + oneRun);
-                        avg.add(simulate(5));
+                        //System.out.println("Attempt #" + i + " simulate is " + oneRun);
+                        //avg.add(simulate(5));
+                    for(int j=0;j<oneRun.size();j++)
+                        System.out.println("Arrival "+(j+1)+", value: "+oneRun.get(j));
+                    System.out.println("Average is: " +avg(oneRun)+"\n"); // Prints the average of the above values
         	}
                 
-                System.out.println("Average: " + avg(avg));
+                // System.out.println("Average: " + avg(avg));
                 //System.out.println("Successful runs " + simulated);
                 //System.out.println("total sum: " + simulated);
     }
