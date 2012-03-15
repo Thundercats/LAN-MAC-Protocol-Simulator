@@ -73,21 +73,23 @@ public class LMP {
     }
     
     public static void main(String[] args) {
-        int simulated = 0;
+        //int simulated = 0;
         int runCount = 100;
         int n = 5; // number of stations
         // ArrayList  oneRun = simulate(5);
-        ArrayList<Integer> avg = new ArrayList();
+        //ArrayList<Integer> avg = new ArrayList();
         
         	for(int i = 0; i < runCount; i++)
         	{
-                    ArrayList  oneRun = simulate(5);
+                    ArrayList oneRun = simulate(5);
         		//simulated += simulate(1);
                         //System.out.println("Attempt #" + i + " simulate is " + oneRun);
                         //avg.add(simulate(5));
                     for(int j=0;j<oneRun.size();j++)
-                        System.out.println("Arrival "+(j+1)+", value: "+oneRun.get(j));
-                    System.out.println("Average is: " +avg(oneRun)+"\n"); // Prints the average of the above values
+                        //System.out.print(" Arrival "+(j+1)+", value: "+oneRun.get(j));
+                        System.out.print("  " + oneRun.get(j));
+                    System.out.println(" ");
+                    //System.out.println("Average is: " +avg(oneRun)+"\n"); // Prints the average of the above values
         	}
                 
                 // System.out.println("Average: " + avg(avg));
