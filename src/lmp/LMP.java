@@ -106,6 +106,7 @@ public class LMP {
     		System.out.println("");
     		//System.out.println("Average is: " +avg(oneRun)+"\n"); // Prints the average of the above values
     	}
+    	System.out.println("=SUM(A2:A101)/100\t=SUM(B2:B101)/100\t=SUM(C2:C101)/100\t=SUM(D2:D101)/100\t=SUM(E2:E101)/100");
 
     	// System.out.println("Average: " + avg(avg));
     	//System.out.println("Successful runs " + simulated);
