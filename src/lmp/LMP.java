@@ -89,20 +89,21 @@ public class LMP {
     	// ArrayList  oneRun = simulate(5);
     	//ArrayList<Integer> avg = new ArrayList();
 
-    	System.out.format("%-3s%-3s%-3s%-3s%-3s \n", "#"+1,"#"+2,"#"+3,"#"+4,"#"+5);
+    	System.out.format("%-3s\t%-3s\t%-3s\t%-3s\t%-3s\t\n", "#"+1,"#"+2,"#"+3,"#"+4,"#"+5);
     	
     	for(int i = 0; i < TIMES_TO_RUN; i++)
     	{
     		ArrayList oneRun = simulate(NUM_OF_NODES);
+    		
     		//simulated += simulate(1);
     		//System.out.println("Attempt #" + i + " simulate is " + oneRun);
     		//avg.add(simulate(5));
     		for(int j=0;j<oneRun.size();j++)
     		{
     			//System.out.print(" Arrival "+(j+1)+", value: "+oneRun.get(j));
-    			System.out.format("%-3d", oneRun.get(j));
+    			System.out.format("%-3d\t", oneRun.get(j));
     		}
-    		System.out.println(" ");
+    		System.out.println("");
     		//System.out.println("Average is: " +avg(oneRun)+"\n"); // Prints the average of the above values
     	}
 
