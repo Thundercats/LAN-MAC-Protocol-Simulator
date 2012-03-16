@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 public class LMP {
     private static final int NUM_OF_NODES = 5;
+    private static final int TIMES_TO_RUN = 100;
     /**
      * @param args the command line arguments
      */
@@ -74,14 +75,14 @@ public class LMP {
     
     public static void main(String[] args) {
         //int simulated = 0;
-        int runCount = 100;
-        int n = 5; // number of stations
+        // int runCount = 100;
+        // int n = 5; // number of stations
         // ArrayList  oneRun = simulate(5);
         //ArrayList<Integer> avg = new ArrayList();
         
-        	for(int i = 0; i < runCount; i++)
+        	for(int i = 0; i < TIMES_TO_RUN; i++)
         	{
-                    ArrayList oneRun = simulate(5);
+                    ArrayList oneRun = simulate(NUM_OF_NODES);
         		//simulated += simulate(1);
                         //System.out.println("Attempt #" + i + " simulate is " + oneRun);
                         //avg.add(simulate(5));
