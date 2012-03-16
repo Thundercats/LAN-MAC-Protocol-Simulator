@@ -7,8 +7,8 @@ import java.util.ArrayList;
  * @author T-CAPS
  */
 public class LMP {
-    private static final int NUM_OF_NODES = 5;
-    private static final int TIMES_TO_RUN = 100;
+    private static final int NUM_OF_NODES = 5; // the # of stations to transmit between
+    private static final int TIMES_TO_RUN = 100; // how times to simulate transmission between the # of stations
     /**
      * @param args the command line arguments
      */
@@ -65,36 +65,46 @@ public class LMP {
         }
         return results; // Return the results
     }
-    public static double avg(ArrayList average)
+    
+    /**
+     * To calculate the average of the total arrival times of each successful transmission
+     * @param arrivalTimes the list of individual arrival time of each successful transmission
+     * @return the average 
+     */
+    public static double avg(ArrayList arrivalTimes)
     {
         double total = 0;
-        for(int i = 0;i <= average.size()-1; i++)
-            total =  total + (Integer) average.get(i);
-        return total / average.size();
+        for(int i = 0;i <= arrivalTimes.size()-1; i++)
+        {
+            total =  total + (Integer) arrivalTimes.get(i);
+        }
+        return total / arrivalTimes.size(); // returns the average
     }
     
     public static void main(String[] args) {
-        //int simulated = 0;
-        // int runCount = 100;
-        // int n = 5; // number of stations
-        // ArrayList  oneRun = simulate(5);
-        //ArrayList<Integer> avg = new ArrayList();
-        
-        	for(int i = 0; i < TIMES_TO_RUN; i++)
-        	{
-                    ArrayList oneRun = simulate(NUM_OF_NODES);
-        		//simulated += simulate(1);
-                        //System.out.println("Attempt #" + i + " simulate is " + oneRun);
-                        //avg.add(simulate(5));
-                    for(int j=0;j<oneRun.size();j++)
-                        //System.out.print(" Arrival "+(j+1)+", value: "+oneRun.get(j));
-                        System.out.print("  " + oneRun.get(j));
-                    System.out.println(" ");
-                    //System.out.println("Average is: " +avg(oneRun)+"\n"); // Prints the average of the above values
-        	}
-                
-                // System.out.println("Average: " + avg(avg));
-                //System.out.println("Successful runs " + simulated);
-                //System.out.println("total sum: " + simulated);
+    	//int simulated = 0;
+    	// int runCount = 100;
+    	// int n = 5; // number of stations
+    	// ArrayList  oneRun = simulate(5);
+    	//ArrayList<Integer> avg = new ArrayList();
+
+    	for(int i = 0; i < TIMES_TO_RUN; i++)
+    	{
+    		ArrayList oneRun = simulate(NUM_OF_NODES);
+    		//simulated += simulate(1);
+    		//System.out.println("Attempt #" + i + " simulate is " + oneRun);
+    		//avg.add(simulate(5));
+    		for(int j=0;j<oneRun.size();j++)
+    		{
+    			//System.out.print(" Arrival "+(j+1)+", value: "+oneRun.get(j));
+    			System.out.print("  " + oneRun.get(j));
+    		}
+    		System.out.println(" ");
+    		//System.out.println("Average is: " +avg(oneRun)+"\n"); // Prints the average of the above values
+    	}
+
+    	// System.out.println("Average: " + avg(avg));
+    	//System.out.println("Successful runs " + simulated);
+    	//System.out.println("total sum: " + simulated);
     }
 }
