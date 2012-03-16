@@ -25,6 +25,7 @@ public class LMP {
            network.get(i).clear(); //Transmits the node we just created
         }
         
+        // keep going until we get the number of results up to the # of nodes
         while(results.size()<nodes)
         {
             int count = 0;
@@ -88,6 +89,8 @@ public class LMP {
     	// ArrayList  oneRun = simulate(5);
     	//ArrayList<Integer> avg = new ArrayList();
 
+    	System.out.format("%-3s%-3s%-3s%-3s%-3s \n", "#"+1,"#"+2,"#"+3,"#"+4,"#"+5);
+    	
     	for(int i = 0; i < TIMES_TO_RUN; i++)
     	{
     		ArrayList oneRun = simulate(NUM_OF_NODES);
@@ -97,7 +100,7 @@ public class LMP {
     		for(int j=0;j<oneRun.size();j++)
     		{
     			//System.out.print(" Arrival "+(j+1)+", value: "+oneRun.get(j));
-    			System.out.print("  " + oneRun.get(j));
+    			System.out.format("%-3d", oneRun.get(j));
     		}
     		System.out.println(" ");
     		//System.out.println("Average is: " +avg(oneRun)+"\n"); // Prints the average of the above values
