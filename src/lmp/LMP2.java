@@ -39,7 +39,7 @@ public class LMP2 {
           u = rand.nextDouble()/Double.MAX_VALUE;
     	}
     	
-    	val = - Math.log(u)*lambda;
+    	val = - Math.log(u)*lambda; // x= -λ log u
     	
     	return val;
     }
@@ -54,7 +54,7 @@ public class LMP2 {
         
         if(next < current)
         {
-            next = current + Poisson(lambda);
+            next = current + Poisson(lambda); // Why is this getting updated?
             return true;
         }
         return false;
