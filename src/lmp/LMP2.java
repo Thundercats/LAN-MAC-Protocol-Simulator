@@ -44,7 +44,7 @@ public class LMP2 {
     	return val;
     }
     
-    public boolean simulate(double lambda)
+    public double simulate(double lambda)
     {
         double current = 0;
         double next = 0;
@@ -52,13 +52,18 @@ public class LMP2 {
         current = Poisson(lambda);
         next = current + Poisson(lambda);
         
-        if(next < current)
+        while(current-prev < 1 || next - current < 1)
         {
-            next = current + Poisson(lambda); // Why is this getting updated?
-            return true;
+            prev = current;
+            current = next;
+            next += Poisson(lambda);
+            //return true;
         }
-        return false;
+        return current;
+        //return false;
     }
+    
+    
     
     public static void main(String[] args) {
     	
