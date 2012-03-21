@@ -19,8 +19,8 @@ public class LMP2 {
      */
    
     public static ArrayList simulate(int nodes)
-    {
-		return null; //don't know what to put for now
+    { 
+        return null; //don't know what to put for now
     }
     
     /**
@@ -35,16 +35,19 @@ public class LMP2 {
     	
     	while (u == 0)
     	{
-    	  //u = Math.random()/Double.MAX_VALUE;
-          u = rand.nextDouble()/Double.MAX_VALUE;
+           
+    	  u = Math.random()/Double.MAX_VALUE;;
+          //u = rand.nextDouble()/Double.MAX_VALUE;
+          System.out.println("val IS: " + u);
     	}
-    	
     	val = - Math.log(u)*lambda; // x= -λ log u
+        System.out.println("val IS: " + val);
+    	
     	
     	return val;
     }
     
-    public double simulate(double lambda)
+    public static double simulate(double lambda)
     {
         double current = 0;
         double next = 0;
@@ -52,7 +55,7 @@ public class LMP2 {
         current = Poisson(lambda);
         next = current + Poisson(lambda);
         
-        while(current-prev < 1 || next - current < 1)
+        while(current - prev < 1 || next - current < 1)
         {
             prev = current;
             current = next;
@@ -63,11 +66,21 @@ public class LMP2 {
         //return false;
     }
     
-    
-    
     public static void main(String[] args) {
-    	
-    	System.out.println("THUNDERCATS! HO!");
+    	int i;
+        double sum;
+        double lambda;
+        for(lambda = 1.0; lambda <= 3.01; lambda += 0.1)
+        {
+            sum = 0;
+            for(i = 0; i < 100; i++)
+            {
+                sum += simulate(lambda);
+                System.out.println("Lambda " +  lambda + " sum " +  sum);
+            }
+        }
+        
+        
         
     }
     	
