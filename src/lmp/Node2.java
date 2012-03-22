@@ -6,44 +6,59 @@ import java.util.Random;
  *
  * @author firen
  */
-public class Node2 {
-    private static double LAMBDA = 20.0; //added temporarily to test
+public class Node2 implements Comparable<Node2> {
+    //private static double LAMBDA = 20.0; //added temporarily to test
     private static double time; //TIME TO SEND
-    
+    private static double lambda;
     /**
      * Initializes a new Node at time t
      */
-    public Node2(double aTime)
+    public Node2(double aLambda)
     {
-        time = aTime;
+        lambda = aLambda;
+        time = Poisson(lambda);
+        
     }
 
-    
     /**
      * This gives our random variable
      * @param lambda the lambda value
      * @return random variable
      */
-    public double Poisson()
+    public double Poisson(double aLambda)
     {
     	double u = 0;
     	double val;
     	
         u = Math.random();  
          
-        val = (-1) * LAMBDA * Math.log(u); // x= -λ log u
+        val = (-1) * lambda * Math.log(u); // x= -λ log u
         return val;
     }
     
     /**
      * Adds Poisson X value to current time
      */
-    public double send()
+    public double send(double aLambda)
     {
-        time += Poisson();
+        time += Poisson(lambda);
         return time;
     }
+
+    public int compareTo(Node2 o) 
+    {
+        return this.compareTo(o);
+    }
     
+    public double getLambda()
+    {
+        return lambda;
+    }
+    
+    public double getTime()
+    {
+        return time;
+    }
    
     /**
      * This gives our random variable
