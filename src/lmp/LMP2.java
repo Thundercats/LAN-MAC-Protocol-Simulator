@@ -28,8 +28,11 @@ public class LMP2 {
 
         for (int i = 0; i < NUM_OF_NODES; i++)
         {  
-               node = new Node2(LAMBDA);         // So basically what I'm trying to do here
-               nodes.add(node);           // is to add new node, intialize it's time to 0 
+               // One way to do it:
+               // Node2 node = new Node2(LAMBDA);         // So basically what I'm trying to do here
+               
+               // ...but I prefer this:
+               nodes.add(new Node2(LAMBDA));           // is to add new node, intialize it's time to 0 
                System.out.println("# " + nodes.get(i).toString());
         }
         
