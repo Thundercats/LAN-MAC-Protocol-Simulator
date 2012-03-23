@@ -2,6 +2,7 @@ package lmp;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -17,7 +18,7 @@ public class LMP2 {
     //private static Random rand;
     private static ArrayList<Node2> nodes;
     private static ArrayList<Node2> sortedNodes;
-    private static ArrayList<Node2> collidingNodes;
+    private static LinkedList<Node2> collidingNodes;
     private static double smallestValue;
     
     public static double simulate()
@@ -40,7 +41,7 @@ public class LMP2 {
         Collections.sort(sortedNodes);
         smallestValue = sortedNodes.get(0).getTime();
         
-        collidingNodes = new ArrayList();
+        collidingNodes = new LinkedList();
         for (int j = 1; j < NUM_OF_NODES; j++) //start at 1 because, don't need to compare with 0th since it's min
         {
             double x;
@@ -55,6 +56,17 @@ public class LMP2 {
             }
         }
         
+        if(collidingNodes.isEmpty())
+            System.out.println("TRANSMISSION SUCCESSFUL"); // DO SOMETHING!
+        else
+        {
+            while(!collidingNodes.isEmpty())
+            {
+                System.out.println("COLLISION!"); // DO SOMETHING!
+                collidingNodes.pop().send(LAMBDA); // Not positive, but I think this is right
+            }
+        }
+                
         /**
          * If there is nothing in CollidingNodes
          *    TRANSMISSION SUCCESSFUL
