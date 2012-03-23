@@ -13,7 +13,7 @@ import java.util.Random;
 public class LMP2 {
     private static final int NUM_OF_NODES = 5; // the # of stations to transmit between
     //private static final int TIMES_TO_RUN = 100; // how times to simulate transmission between the # of stations
-    private static final int LAMBDA = 20;
+    private static final double LAMBDA = 20;
     //private static Random rand;
     private static ArrayList<Node2> nodes;
     private static ArrayList<Node2> sortedNodes;
@@ -22,7 +22,7 @@ public class LMP2 {
     
     public static double simulate()
     {
-        //nodes = new ArrayList();
+        nodes = new ArrayList();
         Node2 node;
     	
 
