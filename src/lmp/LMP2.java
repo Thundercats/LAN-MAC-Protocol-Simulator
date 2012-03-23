@@ -77,6 +77,28 @@ public class LMP2 {
 //        return current;
         return 0;
     }
+    
+    /**
+     * Gets the minimum time value of a node/station
+     * @return the index of the node/station (the station #)
+     */
+    public static int getMin()
+    {
+    	int index = 0;
+    	double min = 0;
+    	
+    	min = nodes.get(0).getTime();
+    	for (int i = 0; i < nodes.size(); i++)
+    	{
+    		if (nodes.get(i).getTime() < min)
+    		{
+    			index = i;
+    			min = nodes.get(i).getTime();
+    		}
+    	}
+    	
+    	return index;
+    }
 
     
     public static void main(String[] args) {
