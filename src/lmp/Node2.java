@@ -9,6 +9,7 @@ import java.util.Random;
 public class Node2 implements Comparable<Node2> {
     //private static double LAMBDA = 20.0; //added temporarily to test
     private Double time; //TIME TO SEND
+    private Double end; // The end of the time slot
     private static double lambda;
     /**
      * Initializes a new Node at time t
@@ -16,7 +17,7 @@ public class Node2 implements Comparable<Node2> {
     public Node2(double aLambda)
     {
         lambda = aLambda;
-        time = Poisson(lambda);
+        time = poisson(lambda);
         
     }
 
@@ -25,7 +26,7 @@ public class Node2 implements Comparable<Node2> {
      * @param lambda the lambda value
      * @return random variable
      */
-    public double Poisson(double aLambda)
+    public double poisson(double aLambda)
     {
     	double u;
     	double val;
@@ -41,7 +42,8 @@ public class Node2 implements Comparable<Node2> {
      */
     public void send(double aLambda)
     {
-        time += Poisson(lambda);
+        end = time + poisson(lambda);
+        // time += Poisson(lambda);
         //should we keep a collection of times as well?
     }
     
@@ -61,6 +63,11 @@ public class Node2 implements Comparable<Node2> {
         return time;
     }
    
+    @Override
+    public String toString()
+    {
+        return "Start: "+ time + "\n End: " + end + "\n"; // Formats the String a little more neatly
+    }
     /**
      * This gives our random variable
      * @param lambda the lambda value
