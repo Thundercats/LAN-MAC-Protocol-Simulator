@@ -40,6 +40,7 @@ public class LMP2 {
         Collections.sort(sortedNodes);
         smallestValue = sortedNodes.get(0).getTime();
         
+        collidingNodes = new ArrayList();
         for (int j = 1; j < NUM_OF_NODES; j++) //start at 1 because, don't need to compare with 0th since it's min
         {
             double x;
