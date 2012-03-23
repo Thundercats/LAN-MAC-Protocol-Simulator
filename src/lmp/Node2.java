@@ -8,7 +8,7 @@ import java.util.Random;
  */
 public class Node2 implements Comparable<Node2> {
     //private static double LAMBDA = 20.0; //added temporarily to test
-    private static double time; //TIME TO SEND
+    private Double time; //TIME TO SEND
     private static double lambda;
     /**
      * Initializes a new Node at time t
@@ -39,15 +39,14 @@ public class Node2 implements Comparable<Node2> {
     /**
      * Adds Poisson X value to current time
      */
-    public double send(double aLambda)
+    public void send(double aLambda)
     {
         time += Poisson(lambda);
-        return time;
     }
 
     public int compareTo(Node2 o) 
     {
-        return this.compareTo(o);
+        return this.time.compareTo(o.time);
     }
     
     public double getLambda()
