@@ -27,7 +27,7 @@ public class Node2 implements Comparable<Node2> {
      */
     public double Poisson(double aLambda)
     {
-    	double u = 0;
+    	double u;
     	double val;
     	
         u = Math.random();  
@@ -42,8 +42,10 @@ public class Node2 implements Comparable<Node2> {
     public void send(double aLambda)
     {
         time += Poisson(lambda);
+        //should we keep a collection of times as well?
     }
-
+    
+    @Override
     public int compareTo(Node2 o) 
     {
         return this.time.compareTo(o.time);

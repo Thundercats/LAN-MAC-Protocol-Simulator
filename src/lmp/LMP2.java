@@ -54,7 +54,16 @@ public class LMP2 {
                 break; //I know this is not good convention but we can add a boolean here or something
             }
         }
-          
+        
+        /**
+         * If there is nothing in CollidingNodes
+         *    TRANSMISSION SUCCESSFUL
+         * else
+         *   Loop through those nodes
+         *      node.send()
+         */
+        
+        
         
         
         // while collision, adjacent times within +/- 1 slot
