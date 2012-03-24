@@ -4,7 +4,7 @@ import java.util.Random;
 
 /**
  *
- * @author firen
+ * @author T-CATS
  */
 public class Node2 implements Comparable<Node2> {
     //private static double LAMBDA = 20.0; //added temporarily to test
