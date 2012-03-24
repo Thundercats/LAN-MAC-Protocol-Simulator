@@ -9,7 +9,10 @@ import java.util.Random;
 public class Node2 implements Comparable<Node2> {
     //private static double LAMBDA = 20.0; //added temporarily to test
     private Double time; //TIME TO SEND
-    private static double lambda;
+    private Double lambda;
+    //new node has no collisions
+    private boolean collided;
+    
     /**
      * Initializes a new Node at time t
      */
@@ -17,7 +20,7 @@ public class Node2 implements Comparable<Node2> {
     {
         lambda = aLambda;
         time = poisson(lambda);
-        
+        collided = false;
     }
 
     /**
@@ -32,7 +35,7 @@ public class Node2 implements Comparable<Node2> {
     	
         u = Math.random();  
          
-        val = (-1) * lambda * Math.log(u); // x= -λ log u
+        val = (-1) * Math.log(u) * aLambda; // x= -λ log u
         return val;
     }
     
@@ -41,9 +44,10 @@ public class Node2 implements Comparable<Node2> {
      */
     public void send(double aLambda)
     {
-        time += poisson(lambda);
+        time += poisson(aLambda);
         //should we keep a collection of times as well?
     }
+    
     
     @Override
     public int compareTo(Node2 o) 
@@ -59,6 +63,32 @@ public class Node2 implements Comparable<Node2> {
     public double getTime()
     {
         return time;
+    }
+    
+    /**
+     * Checks to see if the node collided
+     * @return true if collided, false otherwise
+     */
+    public boolean isCollided()
+    {
+    	//returns the status of the node if it is collided or not
+    	return collided;
+    }
+    
+    /**
+     * Sets the boolean value of collided to true if collided
+     */
+    public void didCollided()
+    {
+    	collided = true;
+    }
+    
+    /**
+     * Sets the boolean value of collided to false
+     */
+    public void notCollided()
+    {
+    	collided = false;
     }
    
     @Override

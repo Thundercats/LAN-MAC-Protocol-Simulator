@@ -18,52 +18,149 @@ public class LMP2 {
     
     private static ArrayList<Node2> nodes;
     private static ArrayList<Node2> sortedNodes;
-    private static LinkedList<Node2> collidingNodes;
-    
-    private static double smallestValue;
-    
+    //private static LinkedList<Node2> collidingNodes;
+        
     public static double simulate(double lambda)
     {
-        nodes = new ArrayList();
+        nodes = new ArrayList<Node2>();
     	
         for (int i = 0; i < NUM_OF_NODES; i++)
         {  
-               nodes.add(new Node2(lambda));           // is to add new node, intialize it's time to 0 
-               //System.out.println("# " + nodes.get(i).toString());
+        	//creates and adds a Node2 object with lambda value
+        	//when creating Node2, it also generates
+        	//the first contention time interval for
+        	//each node/station
+        	nodes.add(new Node2(lambda));           // is to add new node, intialize it's time to 0 
+            //System.out.println("# " + nodes.get(i).toString());
         }
         
+        //copy of created nodes
         sortedNodes = nodes;
+        //sorts the nodes in ascending order of time
         Collections.sort(sortedNodes);
-        smallestValue = sortedNodes.get(0).getTime();
+        //sets the smallest value
+        //smallestValue = sortedNodes.get(0).getTime();
+        //create a list of colliding nodes
+        //collidingNodes = new LinkedList();
         
-        collidingNodes = new LinkedList();
-        while(true)
+        //difference of two contention intervals
+        double difference;
+        //time for one station and another
+        double time1, time2;
+                
+        //lets run the simulation...
+        //while there's a collision
+        boolean collision = true;
+        // the collision count so far...
+        int collisionCount = 0;
+        double totalTime = 0;
+        
+        while(collision)
         {
-            for (int j = 1; j < NUM_OF_NODES; j++) //start at 1 because, don't need to compare with 0th since it's min
+        	//start with the first 
+        	//start at 1 because, don't need to compare with 0th since it's min
+        	//^^took those out...
+            for (int j = 0; j < sortedNodes.size(); j++) 
             {
-                double difference;
-                difference = smallestValue - sortedNodes.get(j).getTime();
+            	time1 = sortedNodes.get(j).getTime();
+                
+                for (int k = j + 1; k < sortedNodes.size(); k++)
+                {
+                	time2 = sortedNodes.get(k).getTime();
+                	difference =  time2 - time1;
+                	
+                	// if the nodes collide...
+                	if (difference <= 1) 
+                    {
+                		//add colliding nodes to list
+                        //collidingNodes.add(sortedNodes.get(j)); //basically keep a collection of all of the nodes that have collided
+                		
+                		//increment collisions seen so far
+                		collisionCount++;
+                		//set nodes that collided
+                		sortedNodes.get(j).didCollided();
+                		sortedNodes.get(k).didCollided();
+                    }
+                	
+                	
+                	/*COMMENTED OUT JUST CUZ...*/
+                	/* 
+                	else 
+                	{
+                		boolean successful = false;
+                		System.out.println("is it? " +
+                				collidingNodes.get(j));
+                		if (collidingNodes.isEmpty())
+                		{
+                			successful = true;
+                			System.out.println("TRANSMISSION SUCCESSFUL"); // DO SOMETHING!
+                		} 
 
-                if (difference <= 1) {
-                    collidingNodes.add(sortedNodes.get(j)); //basically keep a collection of all of the nodes that have collided
-                } else {
-//                boolean successful = false;
-//                System.out.println("is it? " + collidingNodes.get(j));
-//                if (collidingNodes.isEmpty()) 
-//                {
-//                    successful = true;
-//                    System.out.println("TRANSMISSION SUCCESSFUL"); // DO SOMETHING!
-//                } else {
-//                    while (!collidingNodes.isEmpty()) {
-//                        System.out.println("NOT SUCCESSFUL"); // DO SOMETHING!
-//                        collidingNodes.pop().send(lambda);
-//                        //sortedNodes.add(j, collidingNodes.pop()); // Not positive, but I think this is right
-//                    }
-//                }
-                    
-                }
+                		else {
+                			while (!collidingNodes.isEmpty()) {
+                				System.out.println("NOT SUCCESSFUL"); // DO SOMETHING!
+                				collidingNodes.pop().send(lambda);
+                				sortedNodes.add(j, collidingNodes.pop()); // Not
+                				positive, but I think this is right
+                			}
+                		}
+
+                	}
+                	***********/
+                	
+                }//end of inner for loop
+                
+            }//end of out for loop
+            
+            
+            //if there are no collisions at all
+            //break out of the while loop
+            if (collisionCount == 0)
+            {
+            	//totalTime = 0;
+            	for (int i = 0; i < sortedNodes.size(); i++)
+            	{
+            		totalTime = totalTime + sortedNodes.get(i).getTime();
+            	}
+            	
+            	break;
             }
-        }
+            //otherwise....continue
+            else
+            {
+            	//reset the collisions seen so far
+            	collisionCount = 0;
+            	
+            	//go through sorted node and...
+            	for (int i = 0; i < sortedNodes.size(); i++)
+            	{
+            		//go generate next contention time interval
+            		//for each node that collided
+            		//and unset node to not collided
+            		if (sortedNodes.get(i).isCollided())
+            		{
+            			sortedNodes.get(i).send(lambda);
+            			sortedNodes.get(i).notCollided();
+            		}
+            		//if the node did not collide,transmission successful, remove from
+            		//sortedNode...I guess...
+            		else
+            		{
+            			//add up total successful transmission of stations
+            			totalTime = totalTime + sortedNodes.get(i).getTime();
+            			sortedNodes.remove(i);
+            		}
+            		
+            		
+            	}
+            	
+            	//gotta sort the sortedNodes again with the 
+            	//new time contention.....
+            	//sorts the nodes in ascending order of time
+                Collections.sort(sortedNodes);
+            }
+            
+        }//end of while loop
         
        //}
       /**
@@ -73,7 +170,7 @@ public class LMP2 {
          *   Loop through those nodes
          *      node.send()
          */
-        return smallestValue;
+        return totalTime;
     }
    
 
