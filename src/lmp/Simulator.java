@@ -28,15 +28,14 @@ public class Simulator {
      */
     public Double send()
     {
-        ArrayList<Integer> trans = new ArrayList();
+        ArrayList<Node2> collision = new ArrayList();
         for(int i=0;i<fred.size();i++)
         {
-            ArrayList<Node2> collision = new ArrayList();
             fred.get(i).send(lambda); // Send!
             for(int j= i+1;j<fred.size();j++)
             {
                 fred.get(j).send(lambda); // Send!
-                if(Math.abs(fred.get(i).getTime()-fred.get(j).getTime())<=1)
+                if(Math.abs(fred.get(i).getTime()-fred.get(j).getTime())<=1) 
                 {
                     System.out.println("Collision!"); // Oh noes!
                     collision.add(fred.get(j)); // Add to a running list of collisions
