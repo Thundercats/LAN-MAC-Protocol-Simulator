@@ -12,6 +12,7 @@ public class Node2 implements Comparable<Node2> {
     private Double lambda;
     //new node has no collisions
     private boolean collided;
+    private Random ran;
     
     /**
      * Initializes a new Node at time t
@@ -96,6 +97,26 @@ public class Node2 implements Comparable<Node2> {
     {
         return "Start: "+ time + "\n"; // Formats the String a little more neatly
     }
+    
+	public int backoff(int numberCollision) 
+	{
+		int n = numberCollision; // number of collisions seen so far
+		ran = new Random(n);
+		int min = 0;
+		int delay = 0;
+		delay = ((int) ((Math.pow(2, n)) - 1)) + ran.nextInt();
+		// System.out.println("num of delay " + delay);
+
+		// delay += min + (int)(Math.random() * ((delay - min) + 1)); // min +
+		// (mathwhatever) * ((Max - Min) + 1); range is between 0...n
+		// 2^k-1
+		// delay = (int) (Math.random()); // Randomly decides if k will be
+		// incremented or not
+
+		return delay; // * BACKOFF_CONSTANT;
+	}
+    
+    
     /**
      * This gives our random variable
      * @param lambda the lambda value
