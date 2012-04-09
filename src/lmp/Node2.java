@@ -10,6 +10,7 @@ public class Node2 implements Comparable<Node2> {
     //private static double LAMBDA = 20.0; //added temporarily to test
     private Double time; //TIME TO SEND
     private Double lambda;
+    private int n; // Number of collisions
     //new node has no collisions
     private boolean collided;
     private Random ran;
@@ -22,6 +23,7 @@ public class Node2 implements Comparable<Node2> {
         lambda = aLambda;
         time = poisson(lambda);
         collided = false;
+        n=0;
     }
 
     /**
@@ -45,6 +47,7 @@ public class Node2 implements Comparable<Node2> {
      */
     public void send(double aLambda)
     {
+        n=0; // Resets the number of collisions. Used for backoff()
         time += poisson(aLambda);
         //should we keep a collection of times as well?
     }
@@ -97,7 +100,17 @@ public class Node2 implements Comparable<Node2> {
     {
         return "Start: "+ time + "\n"; // Formats the String a little more neatly
     }
-    
+
+    	public int backoff() // version of backoff that does not rely on an external parameter
+	{
+		n++; // number of collisions seen so far
+		ran = new Random(n);
+		int min = 0;
+		int delay = 0;
+		delay = ((int) ((Math.pow(2, n)) - 1)) + ran.nextInt();
+		return delay; // * BACKOFF_CONSTANT;
+	}
+        
 	public int backoff(int numberCollision) 
 	{
 		int n = numberCollision; // number of collisions seen so far
