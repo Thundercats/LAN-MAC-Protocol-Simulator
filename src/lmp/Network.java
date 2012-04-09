@@ -21,22 +21,10 @@ public class Network
     
     public static Double simulate(double lambda) 
     {
-        //indexOfMin = 0;
-        //double current = 0.0;
         int collisionCount = 0;
-        //xVal.clear();
         numOfSuccessfulPackets = 0;
         timeSuccessful = 0;
-        
-        //node = new Node2(lambda);
-        
-        /*
-        for (int i = 0; i < numOfStations; i++) 
-        {
-            current = node.poisson(lambda);
-          	xVal.add(i, current);
-        }
-        */
+        Packet currentPacket, packetToBeTransmitted;
         
         //clear this list of nodes breh
         nodes.clear();
@@ -45,15 +33,16 @@ public class Network
         // a arraylist with each of their own contention time...
         for (int i = 0; i < numOfStations; i++)
         {
-        	nodes.add(new Node2(lambda)); //Add nodes into the ArrayList
+            node = new Node2(lambda);
+        	nodes.add(node); //Add nodes into the ArrayList
         	nodes.get(i).send(lambda); //generate contention time
+                
+            currentPacket = node.createPacket(i, node.getTime()); //creating packets
+            node.addPacketsToQueue(currentPacket); //adding packets
         }
 
-        /*
-        indexOfMin = getMin();
-        min = xVal.get(indexOfMin);
-		*/
-
+        packetToBeTransmitted = node.getNextPacketToBeTransmitted();
+        
         // we need to get the minimum contention
         min = getMinContention(nodes);
         
@@ -64,6 +53,7 @@ public class Network
             for (int j = 0; j < numOfStations; j++) //Go through loop and check whether there is collision at the particular j
             {
                 if (nodes.get(j).getTime() - min <= 1 && j != indexOfMin) 
+                //if(nodes.get(j).getTime() - packetToBeTransmitted.getStationTime() <= 1 && j != indexOfMin) doesn't do right thing just yet
                 {
                     noCollision = false;
                 }
@@ -71,8 +61,6 @@ public class Network
             
             if (noCollision)
             {
-                //numOfSuccessfulPackets++;
-                //timeSuccessful += 8;
                 return min;
             } 
             else 
@@ -93,19 +81,6 @@ public class Network
         }
     }
     
-    /*
-    public static int getTime()
-    {
-        System.out.println("This is " + timeSuccessful);
-        return timeSuccessful;
-    }
-    
-    public static int getPackets()
-    {
-        System.out.println("The packets are " + numOfSuccessfulPackets);
-        return numOfSuccessfulPackets;
-    }
-    */
     
     /**
      * Gets the minimum contention time of a list of nodes
@@ -134,26 +109,6 @@ public class Network
 		return min;
 	}
     
-	/*
-    public static int getMin() 
-    {
-        int index = 0;
-        double min = 0.0;
-
-        min = xVal.get(0);
-        
-        for (int i = 0; i < xVal.size(); i++) 
-        {
-            if (xVal.get(i) < min) 
-            {
-                index = i;
-                min = xVal.get(i);
-            }
-        }
-
-        return index;
-    }*/
-
     public static void main(String[] args) 
     {
         /**
