@@ -8,7 +8,7 @@ package lmp;
  *
  * @author srisreed
  */
-class Packet {
+public class Packet {
     
     private int stationName;
     private Double contentionInterval;
