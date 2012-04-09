@@ -22,7 +22,7 @@ public class Node2 implements Comparable<Node2> {
     {
         lambda = aLambda;
         time = 0.0; //poisson(lambda);
-        collided = false; 
+        collided = false;
         n=0;
     }
 
