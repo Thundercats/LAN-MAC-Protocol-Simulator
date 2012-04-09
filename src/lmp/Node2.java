@@ -21,7 +21,7 @@ public class Node2 implements Comparable<Node2> {
     public Node2(double aLambda)
     {
         lambda = aLambda;
-        time = poisson(lambda);
+        time = 0.0; //poisson(lambda);
         collided = false;
         n=0;
     }

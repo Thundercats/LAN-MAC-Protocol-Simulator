@@ -46,6 +46,7 @@ public class Network
         for (int i = 0; i < numOfStations; i++)
         {
         	nodes.add(new Node2(lambda)); //Add nodes into the ArrayList
+        	nodes.get(i).send(lambda); //generate contention time
         }
 
         /*
@@ -70,8 +71,8 @@ public class Network
             
             if (noCollision)
             {
-                numOfSuccessfulPackets++;
-                timeSuccessful += 8;
+                //numOfSuccessfulPackets++;
+                //timeSuccessful += 8;
                 return min;
             } 
             else 
@@ -92,6 +93,7 @@ public class Network
         }
     }
     
+    /*
     public static int getTime()
     {
         System.out.println("This is " + timeSuccessful);
@@ -103,6 +105,7 @@ public class Network
         System.out.println("The packets are " + numOfSuccessfulPackets);
         return numOfSuccessfulPackets;
     }
+    */
     
     /**
      * Gets the minimum contention time of a list of nodes
