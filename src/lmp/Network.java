@@ -117,7 +117,7 @@ public class Network
 		double min = 0.0;
 
 		// min is the first station
-		min = list.get(0).getTime();
+		min = list.get(0).getTime(); 
 		indexOfMin = 0;
 
 		for (int i = 0; i < list.size(); i++) 
