@@ -2,7 +2,7 @@ package lmp;
 
 import java.util.ArrayList;
 
-public class Network 
+public class Network
 {
     //private static ArrayList<Double> xVal = new ArrayList();
     private static Node2 node;
