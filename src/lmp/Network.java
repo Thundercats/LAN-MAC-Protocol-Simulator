@@ -4,51 +4,67 @@ import java.util.ArrayList;
 
 public class Network 
 {
-    private static ArrayList<Double> xVal = new ArrayList(); // This needs to go eventually
-    private static ArrayList<Node2> nodes = new ArrayList(); // Will eventually store nodes
-    // private static Node2 node;
+    //private static ArrayList<Double> xVal = new ArrayList();
+    private static Node2 node;
     private static int numOfStations = 20;
     private static int RUNCOUNT = 100;
     private static Double min = 0.0;
     
     private static int numOfSuccessfulPackets;
     private static int timeSuccessful;
+    private static ArrayList<Node2> nodes = new ArrayList(); // Will eventually store nodes
+    
+    
+    // made this static global
+    private static int indexOfMin = 0;
     
     
     public static Double simulate(double lambda) 
     {
-        for(int i = 0; i < numOfStations; i++)
-        {
-           nodes.add(new Node2(lambda)); //Add nodes into the ArrayList
-        }
-        int indexOfMin = 0;
-        double current = 0.0;
+        //indexOfMin = 0;
+        //double current = 0.0;
         int collisionCount = 0;
-        xVal.clear();
+        //xVal.clear();
         numOfSuccessfulPackets = 0;
         timeSuccessful = 0;
         
-       // node = new Node2(lambda); // create a single node
+        //node = new Node2(lambda);
         
+        /*
         for (int i = 0; i < numOfStations; i++) 
         {
-            current = nodes.get(i).poisson(lambda); // call poisson with a specified lambda
-            xVal.add(i, current);
+            current = node.poisson(lambda);
+          	xVal.add(i, current);
+        }
+        */
+        
+        //clear this list of nodes breh
+        nodes.clear();
+        
+        // creating individual stations and storing them into
+        // a arraylist with each of their own contention time...
+        for (int i = 0; i < numOfStations; i++)
+        {
+        	nodes.add(new Node2(lambda)); //Add nodes into the ArrayList
         }
 
+        /*
         indexOfMin = getMin();
         min = xVal.get(indexOfMin);
+		*/
 
+        // we need to get the minimum contention
+        min = getMinContention(nodes);
+        
         while (true) 
         {
             boolean noCollision = true;
             
             for (int j = 0; j < numOfStations; j++) //Go through loop and check whether there is collision at the particular j
             {
-                if (xVal.get(j) - min <= 1 && j != indexOfMin) 
+                if (nodes.get(j).getTime() - min <= 1 && j != indexOfMin) 
                 {
-                    // System.out.println("Collision!");
-                    noCollision = false; // A collision!
+                    noCollision = false;
                 }
             }
             
@@ -58,15 +74,20 @@ public class Network
                 timeSuccessful += 8;
                 return min;
             } 
-            else // There was a collision
+            else 
             {
-                // FIX THIS LINE:
-                // xVal.set(indexOfMin, min + node.poisson(lambda)); // TODO: change to Exp Backoff for Part D
+                
+                //xVal.set(indexOfMin, min + node.poisson(lambda));
+            	// add poisson to current contention time to current node...
+                nodes.get(indexOfMin).send(lambda);
                 
                 collisionCount++;
-                //xVal.set(indexOfMin, min + node.backoff(collisionCount)); // Should be collisions of a particular node, not total collisions
-                indexOfMin = getMin();
-                min = xVal.get(indexOfMin); //updated to new min
+                //xVal.set(indexOfMin, min + node.backoff(collisionCount));
+                //indexOfMin = getMin();
+                //min = xVal.get(indexOfMin); //updated to new min
+                
+                // getting new min
+                min = getMinContention(nodes);
             }
         }
     }
@@ -83,6 +104,34 @@ public class Network
         return numOfSuccessfulPackets;
     }
     
+    /**
+     * Gets the minimum contention time of a list of nodes
+     * @param list the list of nodes
+     * @return the minimum contention time
+     */
+	public static double getMinContention(ArrayList<Node2> list)
+	{
+		double min = 0.0;
+
+		// min is the first station
+		min = list.get(0).getTime();
+		indexOfMin = 0;
+
+		for (int i = 0; i < list.size(); i++) 
+		{
+			// see if current station is min contention time
+
+			if (list.get(i).getTime() < min) 
+			{
+				min = list.get(i).getTime();
+				indexOfMin = i;
+			}
+		}
+
+		return min;
+	}
+    
+	/*
     public static int getMin() 
     {
         int index = 0;
@@ -100,7 +149,7 @@ public class Network
         }
 
         return index;
-    }
+    }*/
 
     public static void main(String[] args) 
     {
@@ -109,9 +158,6 @@ public class Network
          * delay = (timeSentSuccessfully - timeCreated);
          * delay jitter (variance?)
          */
-        
-        System.out.println(args.length); // used for invoking via terminal
-        
         Double sum = 0.0;
         Double lambda = 0.0;
         double throughput = 0.0;
