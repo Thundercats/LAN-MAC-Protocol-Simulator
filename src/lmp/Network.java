@@ -1,13 +1,15 @@
 package lmp;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Network
 {
     //private static ArrayList<Double> xVal = new ArrayList();
     private static Node2 node;
     private static int numOfStations = 20;
-    private static int RUNCOUNT = 100;
+    // private static int RUNCOUNT = 100;
+    private static int MAX_TIME_SLOT = 100;
     private static Double min = 0.0;
     
     private static int numOfSuccessfulPackets;
@@ -116,23 +118,45 @@ public class Network
          * delay = (timeSentSuccessfully - timeCreated);
          * delay jitter (variance?)
          */
+        Scanner in = new Scanner(System.in);
         Double sum = 0.0;
         Double lambda = 0.0;
         double throughput = 0.0;
         
+        System.out.println("Welcome to the LAN-MAC-Protocol simulator! Edit values? Y/N\nDefaults to N="+MAX_TIME_SLOT+" and lambda=20.0 to 4.0");
+        if((in.next().toLowerCase().compareTo("y"))==0)
+        {
+            System.out.println("Please enter a value for lambda: ");
+            lambda = in.nextDouble(); // Read user input for lambda
+            System.out.println("Please enter a value for N (number of stations): ");
+            MAX_TIME_SLOT = in.nextInt(); // Read user input for N
+            System.out.println("Packets do not work for now.");
+            
+            // Here comes the actual work:
+            for (int i = 0; i < MAX_TIME_SLOT; i++) 
+            {
+                sum += simulate(lambda);
+                
+            }
+            System.out.println("Lambda\t" + lambda + "\tsum\t" + sum / MAX_TIME_SLOT);
+            
+            System.exit(0); // Exit and return 0
+        }
+        
         for (lambda = 20.0; lambda >= 4.0; lambda -= 2.0) 
         {
-            for (int i = 0; i < RUNCOUNT; i++) 
+            for (int i = 0; i < MAX_TIME_SLOT; i++) 
             {
                 sum += simulate(lambda);
                // throughput += (getPackets() * 8 * 512) / getTime();
                 
             }
             
-            System.out.println("Lambda\t" + lambda + "\tsum\t" + sum / RUNCOUNT);
+            System.out.println("Lambda\t" + lambda + "\tsum\t" + sum / MAX_TIME_SLOT);
             //System.out.println("Lambda\t" + lambda + "\tsum\t" + throughput);
             
             sum = 0.0;
         }
+        
     }
 }
