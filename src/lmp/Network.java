@@ -5,33 +5,38 @@ import java.util.Collections;
 
 public class Network 
 {
-    private static ArrayList<Double> xVal = new ArrayList();
-    private static Node node;
-    private static int numOfStations = 20;
-    private static int MAX_TIME_SLOT = 20000;
-    private static Double min = 0.0;
-    private static Packet minPacket, collidedPacket;
+    private static ArrayList<Double> xVal = new ArrayList(); // contention time arraylist
+    private static Node node; // a node instance
+    private static int numOfStations = 20; // # of current stations
+    private static int MAX_TIME_SLOT = 20000; // max # of time slots to run up till
+    private static Double min = 0.0; // min # constant
+    private static Packet minPacket, collidedPacket; // the minimum time of a packet, the packet that collided
     
-    private static int numOfSuccessfulPackets;
-    private static int timeSuccessful;
+    private static int numOfSuccessfulPackets; // the number of successful packets so far
+    private static int timeSuccessful; // the number of successful packets transmitted
     
-    private static ArrayList<Node> nodes = new ArrayList(); // Will eventually store nodes
-    private static ArrayList<Packet> packets = new ArrayList();
-    private static ArrayList<Packet> collidedPackets = new ArrayList();
-    private static Double currentTime = 0.0;
+    private static ArrayList<Node> nodes = new ArrayList(); // a arraylist of nodes/stations
+    private static ArrayList<Packet> packets = new ArrayList(); // a arraylist of packets
+    private static ArrayList<Packet> collidedPackets = new ArrayList(); // a arraylist of packets that collided
+    private static Double currentTime = 0.0; // the current contention time of type double
     
     // made this static global
-    private static int indexOfMin = 0; //Valid for C
+    private static int indexOfMin = 0; //Valid for C, the index of the packet that contains the minimum contention time
     
     /**
      * Creates packets for given number of stations
-     * @param alambda 
+     * @param alambda the current lambda value
      */
-    public static void generatePackets(double alambda) {
-        for (int i = 0; i < numOfStations; i++) {
-
+    public static void generatePackets(double alambda) 
+    {
+        for (int i = 0; i < numOfStations; i++) 
+        {
+        	// creates new stations of type node
             node = new Node(i, alambda);
+            // add stations to arraylist
             nodes.add(node);
+            // then for every station, attempt to transmit
+            // generating unique contention time for every station
             nodes.get(i).send(alambda);
         }
     }
@@ -44,52 +49,71 @@ public class Network
      */
     public static void simulate(double lambda) 
     {
+    	// We'll go ahead and initialize some variables
         //int collisionCount = 0;
         numOfSuccessfulPackets = 0;
         timeSuccessful = 0;
         //Packet currentPacket, packetToBeTransmitted, successfulPacket;
         
-        //clear this list of nodes breh
+        /* clear this list of nodes breh
+       	   need to clear because the arraylists are static */
         nodes.clear();
         packets.clear();
+        
+        /* we'll go ahead and make a temporary variable to hold the
+           difference of the contention time of two stations to see
+           if they collide or not between
+           t-1 & t+1 */
         double difference;
         
-        // creating individual stations and storing them into
-        // a arraylist with each of their own contention time...
+        /* creating individual stations and storing them into
+           a arraylist with each of their own contention time... */
         //for (int i = 0; i < numOfStations; i++) 
         //{
             //node = new Node(i, lambda);
             //nodes.add(node); //Add nodes into the ArrayList
             //nodes.get(i).send(lambda); //generate contention time
-            generatePackets(lambda); //<--takes care of what we WERE doing with the loop before
+        
+            generatePackets(lambda); //<--takes care of what we WERE doing with the loop before.
+            						 // And lets go ahead and generate these packets for stations.
             
         //}
 
         packets = getSortedPacketList(); //get all of the packets that are waiting to be transmitted sorted  
-        minPacket = packets.get(0); //min
+        minPacket = packets.get(0); // the packet with the minimum contention time, the first element of the sorted list
         
+        /* Let's go ahead and start simulating!
+         * When the current time reaches the max time slots, STOP!
+         */
         while (currentTime <= MAX_TIME_SLOT) 
         {
-            boolean noCollision = true;
+            boolean noCollision = true; // No collisions so far because we're just started...
             
-            for (int j = 0; j < numOfStations; j++) //Go through loop and check whether there is collision at the particular j
+            //Go through loop and check whether there is collision at the particular j
+            for (int j = 0; j < numOfStations; j++) 
             {
+            	// storing the difference
                 difference = packets.get(j).getContentionInterval() - minPacket.getContentionInterval();
                 
+                // checking if stations collides, if it does then...
                 if(difference <= 1 && j != minPacket.getStationName())
                 {
-                    noCollision = false;
-                    collidedPacket = packets.get(j);
-                    break;
+                    noCollision = false; // that means we have a collision!
+                    collidedPacket = packets.get(j); // So then we get the packet that collided with
+                    								 // the minPacket and store it into a list of
+                    								 // collidedPackets
+                    break; // After getting the collided packet, break of the for loop!
                 }
-            }
+            }// end of for loop
             
+            // if no stations collide with one another....
             if (noCollision)
             {
-                currentTime += 8; //since successful add 8 time slots
+                currentTime += 8; //since successful, add 8 time slots
                 numOfSuccessfulPackets++; //increase numberOfSuccessful packets, used for throughput calculations
                 packets.get(0).setStationTime(currentTime); //set the transmittedTime
             } 
+            // OTHERWISE, stations collided!
             else 
             {
                 currentTime++; //increments time by only 1 time slot since its a collision
@@ -97,6 +121,7 @@ public class Network
                 minPacket.incrementCollision(); //increment collision for the specific packet
                 collidedPacket.incrementCollision(); //increment collision for the collided packet
                 
+                // apply backoff to collided packets
                 nodes.get(minPacket.getStationName()).backoff(minPacket.getCollisionCount(), minPacket.getContentionInterval()); //backoff
                 nodes.get(collidedPacket.getStationName()).backoff(collidedPacket.getCollisionCount(), collidedPacket.getContentionInterval()); //backoff
                 
@@ -121,7 +146,7 @@ public class Network
     
     /**
      * Sorts and returns the packets in order
-     * @return 
+     * @return the sorted list of packets from ascending order
      */
     public static ArrayList<Packet> getSortedPacketList()
     {
