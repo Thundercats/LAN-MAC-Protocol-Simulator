@@ -1,116 +1,191 @@
 package lmp;
 
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Collections;
 
-public class Network
+public class Network 
 {
-    //private static ArrayList<Double> xVal = new ArrayList();
-    private static Node2 node;
+    private static ArrayList<Double> xVal = new ArrayList();
+    private static Node node;
     private static int numOfStations = 20;
-    // private static int RUNCOUNT = 100;
-    private static int MAX_TIME_SLOT = 100;
+    private static int MAX_TIME_SLOT = 20000;
     private static Double min = 0.0;
+    private static Packet minPacket, collidedPacket;
     
     private static int numOfSuccessfulPackets;
     private static int timeSuccessful;
-    private static ArrayList<Node2> nodes = new ArrayList(); // Will eventually store nodes
     
+    private static ArrayList<Node> nodes = new ArrayList(); // Will eventually store nodes
+    private static ArrayList<Packet> packets = new ArrayList();
+    private static ArrayList<Packet> collidedPackets = new ArrayList();
+    private static Double currentTime = 0.0;
     
     // made this static global
-    private static int indexOfMin = 0;
+    private static int indexOfMin = 0; //Valid for C
     
-    
-    public static Double simulate(double lambda) 
+    /**
+     * Creates packets for given number of stations
+     * @param alambda 
+     */
+    public static void generatePackets(double alambda) {
+        for (int i = 0; i < numOfStations; i++) {
+
+            node = new Node(i, alambda);
+            nodes.add(node);
+            nodes.get(i).send(alambda);
+        }
+    }
+
+    /**
+     * Gets the generated packets, checks for collisions, adds backoff to collided packets, 
+     * continues to generate new packets and adds to queue,
+     * it will do all of this until the condition <= 20,000 time slots is met!
+     * @param lambda 
+     */
+    public static void simulate(double lambda) 
     {
-        int collisionCount = 0;
+        //int collisionCount = 0;
         numOfSuccessfulPackets = 0;
         timeSuccessful = 0;
-        Packet currentPacket, packetToBeTransmitted;
+        //Packet currentPacket, packetToBeTransmitted, successfulPacket;
         
         //clear this list of nodes breh
         nodes.clear();
+        packets.clear();
+        double difference;
         
         // creating individual stations and storing them into
         // a arraylist with each of their own contention time...
-        for (int i = 0; i < numOfStations; i++)
-        {
-            node = new Node2(lambda);
-        	nodes.add(node); //Add nodes into the ArrayList
-        	nodes.get(i).send(lambda); //generate contention time
-                
-            currentPacket = node.createPacket(i, node.getTime()); //creating packets
-            node.addPacketsToQueue(currentPacket); //adding packets
-        }
+        //for (int i = 0; i < numOfStations; i++) 
+        //{
+            //node = new Node(i, lambda);
+            //nodes.add(node); //Add nodes into the ArrayList
+            //nodes.get(i).send(lambda); //generate contention time
+            generatePackets(lambda); //<--takes care of what we WERE doing with the loop before
+            
+        //}
 
-        packetToBeTransmitted = node.getNextPacketToBeTransmitted();
+        packets = getSortedPacketList(); //get all of the packets that are waiting to be transmitted sorted  
+        minPacket = packets.get(0); //min
         
-        // we need to get the minimum contention
-        min = getMinContention(nodes);
-        
-        while (true) 
+        while (currentTime <= MAX_TIME_SLOT) 
         {
             boolean noCollision = true;
             
             for (int j = 0; j < numOfStations; j++) //Go through loop and check whether there is collision at the particular j
             {
-                if (nodes.get(j).getTime() - min <= 1 && j != indexOfMin) 
-                //if(nodes.get(j).getTime() - packetToBeTransmitted.getStationTime() <= 1 && j != indexOfMin) doesn't do right thing just yet
+                difference = packets.get(j).getContentionInterval() - minPacket.getContentionInterval();
+                
+                if(difference <= 1 && j != minPacket.getStationName())
                 {
                     noCollision = false;
+                    collidedPacket = packets.get(j);
+                    break;
                 }
             }
             
             if (noCollision)
             {
-                return min;
+                currentTime += 8; //since successful add 8 time slots
+                numOfSuccessfulPackets++; //increase numberOfSuccessful packets, used for throughput calculations
+                packets.get(0).setStationTime(currentTime); //set the transmittedTime
             } 
             else 
             {
+                currentTime++; //increments time by only 1 time slot since its a collision
                 
-                //xVal.set(indexOfMin, min + node.poisson(lambda));
-            	// add poisson to current contention time to current node...
-                nodes.get(indexOfMin).send(lambda);
+                minPacket.incrementCollision(); //increment collision for the specific packet
+                collidedPacket.incrementCollision(); //increment collision for the collided packet
                 
-                collisionCount++;
-                //xVal.set(indexOfMin, min + node.backoff(collisionCount));
-                //indexOfMin = getMin();
-                //min = xVal.get(indexOfMin); //updated to new min
+                nodes.get(minPacket.getStationName()).backoff(minPacket.getCollisionCount(), minPacket.getContentionInterval()); //backoff
+                nodes.get(collidedPacket.getStationName()).backoff(collidedPacket.getCollisionCount(), collidedPacket.getContentionInterval()); //backoff
                 
-                // getting new min
-                min = getMinContention(nodes);
+                //packets.set(minPacket.getStationName(), minPacket);
+                //packets.set(collidedPacket.getStationName(),collidedPacket);
+                
+                packets = getSortedPacketList(); //get all of the packets that are waiting to be transmitted sorted
+                minPacket = packets.get(0); //min
+                //minPacket = getMinPacket(packets);
+                
+                
+                /**
+                 * Need to add waiting packets into list....Need to generate new packets per station 
+                 */
             }
+            
+            generatePackets(lambda); //generates new packets after checking and dealing with collisions...need to continue doing this until <= 20,000
         }
     }
     
     
-    /**
-     * Gets the minimum contention time of a list of nodes
-     * @param list the list of nodes
-     * @return the minimum contention time
-     */
-	public static double getMinContention(ArrayList<Node2> list)
-	{
-		double min = 0.0;
-
-		// min is the first station
-		min = list.get(0).getTime();
-		indexOfMin = 0;
-
-		for (int i = 0; i < list.size(); i++) 
-		{
-			// see if current station is min contention time
-
-			if (list.get(i).getTime() < min) 
-			{
-				min = list.get(i).getTime();
-				indexOfMin = i;
-			}
-		}
-
-		return min;
-	}
     
+    /**
+     * Sorts and returns the packets in order
+     * @return 
+     */
+    public static ArrayList<Packet> getSortedPacketList()
+    {
+        ArrayList<Packet> sortedList = new ArrayList();
+        
+        for(Node n: nodes)
+        {
+            sortedList.add(n.getNextPacketToBeTransmitted());
+        }
+        
+        Collections.sort(sortedList);
+        return sortedList;
+    }
+    
+    
+    /*
+     * Current not using any of the min methods, instead I am just sorting them in the method ABOVE
+     */
+//    /**
+//     * Gets the minimum contention time of a list of nodes
+//     * @param list the list of nodes
+//     * @return the minimum contention time
+//     */
+//    public static double getMinContention(ArrayList<Node> list)
+//    {
+//        double min = 0.0;
+//
+//        // min is the first station
+//        min = list.get(0).getTime();
+//        indexOfMin = 0;
+//        for (int i = 0; i < list.size(); i++) {
+//            // see if current station is min contention time
+//
+//            if (list.get(i).getTime() < min) {
+//                min = list.get(i).getTime();
+//                indexOfMin = i;
+//            }
+//        }
+//
+//        return min;
+//    }
+//    
+//    public static Packet getMinPacket(ArrayList<Packet> list)
+//    {
+//        Packet min;
+//
+//        min = list.get(0);
+//
+//        for (int i = 0; i < list.size(); i++) {
+//
+//            if (list.get(i).getContentionInterval() < min.getContentionInterval()) {
+//                min = list.get(i);
+//            }
+//        }
+//
+//        return min;
+//    }
+        
+    
+    /**
+     * This method needs to be re-written for D! We don't need lambda loop because she will input her own lambda
+     * but for testing purposes it's okay!
+     * @param args 
+     */
     public static void main(String[] args) 
     {
         /**
@@ -118,42 +193,26 @@ public class Network
          * delay = (timeSentSuccessfully - timeCreated);
          * delay jitter (variance?)
          */
-        Scanner in = new Scanner(System.in);
         Double sum = 0.0;
         Double lambda = 0.0;
         double throughput = 0.0;
-        
-        System.out.println("Welcome to the LAN-MAC-Protocol simulator! Edit values? Y/N\nDefaults to N="+MAX_TIME_SLOT+" and lambda=20.0 to 4.0");
-        if((in.next().toLowerCase().compareTo("y"))==0)
-        {
-            System.out.println("Please enter a value for lambda: ");
-            lambda = in.nextDouble(); // Read user input for lambda
-            System.out.println("Please enter a value for N (number of stations): ");
-            MAX_TIME_SLOT = in.nextInt(); // Read user input for N
-            System.out.println("Packets do not work for now.");
-            
-            // Here comes the actual work:
-            for (int i = 0; i < MAX_TIME_SLOT; i++) 
-            {
-                sum += simulate(lambda);
-                
-            }
-            System.out.println("Lambda\t" + lambda + "\tsum\t" + sum / MAX_TIME_SLOT);
-            
-            System.exit(0); // Exit and return 0
-        }
+        ArrayList<Packet> resultPackets = new ArrayList();
         
         for (lambda = 20.0; lambda >= 4.0; lambda -= 2.0) 
         {
             for (int i = 0; i < MAX_TIME_SLOT; i++) 
             {
-                sum += simulate(lambda);
-               // throughput += (getPackets() * 8 * 512) / getTime();
+                simulate(lambda);
+                //System.out.println(" " + resultPackets.get(i).toString());
                 
             }
             
-            System.out.println("Lambda\t" + lambda + "\tsum\t" + sum / MAX_TIME_SLOT);
+                System.out.println("lambda " + lambda + " current time is " + currentTime);
+                
+            //System.out.println("lambda " + lambda + " current time is " + currentTime);
+            //System.out.println("Lambda\t" + lambda + "\tsum\t" + sum / RUNCOUNT);
             //System.out.println("Lambda\t" + lambda + "\tsum\t" + throughput);
+            throughput = (numOfSuccessfulPackets * 8 * 512) / (MAX_TIME_SLOT * 51.2 * Math.pow(10, -6));
             
             sum = 0.0;
         }

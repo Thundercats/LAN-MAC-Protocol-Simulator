@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package lmp;
 
 /**
  *
  * @author srisreed
  */
-public class Packet {
+class Packet implements Comparable<Packet> {
     
     private int stationName;
     private Double contentionInterval;
@@ -68,4 +64,11 @@ public class Packet {
         return contentionInterval+" "+stationName;
         
     }
+
+    @Override
+    public int compareTo(Packet t) {
+        return this.contentionInterval.compareTo(t.contentionInterval);
+    
+    }
+    
 }
