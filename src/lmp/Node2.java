@@ -8,10 +8,10 @@ import java.util.Random;
  * @author T-CATS
  */
 public class Node2 implements Comparable<Node2> {
-	//private static double LAMBDA = 20.0; //added temporarily to test
+        private static final double BACKOFF_CONSTANT = 51.2; // μseconds! BackOff Constant is the constant
 	private Double time; //TIME TO SEND
 	private Double lambda;
-	private int n; // Number of collisions
+	private int collisionCount; // Number of collisions
 	//new node has no collisions
 	private boolean collided;
 	private Random ran;
@@ -23,8 +23,9 @@ public class Node2 implements Comparable<Node2> {
 	 */
 	public Node2(double aLambda)
 	{
+                collisionCount = 0;
 		lambda = aLambda;
-		time = 0.0;
+		time = poisson(aLambda);
 		collided = false;
 		packetQueue = new PriorityQueue<Packet>();
 	}
@@ -50,7 +51,7 @@ public class Node2 implements Comparable<Node2> {
 	 */
 	public void send(double aLambda)
 	{
-		n=0; // Resets the number of collisions. Used for backoff()
+		collisionCount=0; // Resets the number of collisions. Used for backoff()
 		time += poisson(aLambda);
 		//should we keep a collection of times as well?
 	}
@@ -71,7 +72,17 @@ public class Node2 implements Comparable<Node2> {
 	{
 		return time;
 	}
-
+        
+        
+     /**
+     * Method to be run if a collision is detected
+     */
+    public void collide()
+    {
+        time += 1 + backoff(); // our next attempt
+        System.out.println("collision count " + collisionCount);
+    }
+    
 	/**
 	 * Checks to see if the node collided
 	 * @return true if collided, false otherwise
@@ -97,24 +108,23 @@ public class Node2 implements Comparable<Node2> {
 	{
 		collided = false;
 	}
-
+        
 	@Override
 	public String toString()
 	{
 		return "Start: "+ time + "\n"; // Formats the String a little more neatly
 	}
 
-	public int backoff() // version of backoff that does not rely on an external parameter
+	public double backoff() // version of backoff that does not rely on an external parameter
 	{
-		n++; // number of collisions seen so far
-		ran = new Random(n);
-		int min = 0;
-		int delay = 0;
-		delay = ((int) ((Math.pow(2, n)) - 1)) + ran.nextInt();
+		collisionCount++; // number of collisions seen so far
+		ran = new Random(collisionCount);
+		double delay = ((ran.nextInt(2))*(Math.pow(2, collisionCount) - 1)); // ran.nextInt(2) gives an int between 0 and 2 (exclusive)
+                                                                                     // which randomly decides if time is incremented
 		return delay; // * BACKOFF_CONSTANT;
 	}
 
-	public int backoff(int numberCollision) 
+	public double backoff(int numberCollision) 
 	{
 		int n = numberCollision; // number of collisions seen so far
 		ran = new Random(n);
