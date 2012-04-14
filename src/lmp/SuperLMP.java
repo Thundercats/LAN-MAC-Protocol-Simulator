@@ -31,7 +31,6 @@ public class SuperLMP extends JPanel {
         JFrame frame = new JFrame();
         JPanel boardPanel = new JPanel();
         int throughAverage = 0; // Used for calculating average throughput
-        double trafficAverage = 0; // Used for calculating average traffic load
         for (int i = 0; i <= 50; i++) {
             Simulator mario = new Simulator(NUM_OF_STATIONS, lambda);
             double sum = 0; // The summation of sums!
@@ -45,12 +44,7 @@ public class SuperLMP extends JPanel {
 
                 sum = +mario.getSentTime(); // Add the sent times together
                 System.out.println("Packets sent successfully at time " + mario.getSuccessfulPacketsSent());
-            }
-            // Print out the calculated traffic load
-            System.out.println("Calculated traffic load: " + ((NUM_OF_STATIONS * AVG_PACKET_SIZE * 8)/(lambda * MICROSECONDS)));
-            // Calculate the average traffic load
-            trafficAverage+=(NUM_OF_STATIONS * AVG_PACKET_SIZE * 8)/(lambda * MICROSECONDS);
-            
+            }            
             // Print out the calculated throughput
             System.out.println("Calculated throughput is: " + (mario.getSuccessfulPacketsSent() * AVG_PACKET_SIZE * 512) / (SLOT_LIMIT * 51.2 * Math.pow(10, -6))); //Throughput!
             // Calculate the average throuput
@@ -59,6 +53,6 @@ public class SuperLMP extends JPanel {
         // I think this is obvious
         System.out.println("Average throughput is: " + throughAverage / 50);
         // So is this
-        System.out.println("Average traffic load is: " + trafficAverage/50);
+        System.out.println("Traffic load is: " + (NUM_OF_STATIONS * AVG_PACKET_SIZE * 8)/(lambda * MICROSECONDS));
     }
 }
