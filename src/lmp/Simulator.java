@@ -26,9 +26,7 @@ public class Simulator {
         collision = new ArrayList(); // Keeps track of collisions
         this.lambda = lambda;
         for(int i=1;i<=numOfStations;i++)
-            fred.add(new Node2(lambda)); // Create new Nodes initilzed with time poisson()
-        // Sort fred
-        Collections.sort(fred);
+            fred.add(new Node2(lambda)); // Create new Nodes
     }
     
     /**
@@ -37,6 +35,7 @@ public class Simulator {
      */
     public Double send()
     {
+        Collections.sort(fred);
         for(int i=0;i<fred.size();i++)
         {
             fred.get(i).send(lambda); // Send!
@@ -50,8 +49,8 @@ public class Simulator {
                     fred.get(i).collide();
                     collision.add(fred.get(j)); // Add to a running list of collisions
                     collision.add(fred.get(i)); // Add to a running list of collisions
-                    
                 }
+                
             }
             if(collision.isEmpty())
             {
