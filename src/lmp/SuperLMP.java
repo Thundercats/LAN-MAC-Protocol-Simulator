@@ -3,11 +3,15 @@
  */
 package lmp;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author Adrian
  */
-public class SuperLMP {
+public class SuperLMP extends JPanel {
 
     public static Double result;
     public static final int SLOT_LIMIT = 20000; // Run until this many time slots have passed
@@ -17,7 +21,15 @@ public class SuperLMP {
     public static double lambda = 20.0;
 
     public static void main(String[] args) {
-        int throughAverage = 0; // Used to calclate the average throughput
+        String s1 = JOptionPane.showInputDialog(null, "Enter the number of stations");
+        NUM_OF_STATIONS = Integer.parseInt(s1);
+        String s2 = JOptionPane.showInputDialog(null, "Enter the Packet Size");
+        AVG_PACKET_SIZE = Integer.parseInt(s2);
+        String s3 = JOptionPane.showInputDialog(null, "Enter lambda");
+        lambda = Double.parseDouble(s3);
+        JFrame frame = new JFrame();
+        JPanel boardPanel = new JPanel();
+        int throughAverage = 0;
         for (int i = 0; i <= 50; i++) {
             Simulator mario = new Simulator(NUM_OF_STATIONS, lambda);
             double sum = 0; // The summation of sums!
