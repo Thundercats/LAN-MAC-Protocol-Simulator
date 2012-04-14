@@ -9,7 +9,7 @@ package lmp;
  */
 public class SuperLMP {
     public static Double result;
-    public final int SLOT_LIMIT=20000; // Run until this many time slots have passed
+    public static final int SLOT_LIMIT=20000; // Run until this many time slots have passed
     public static final int AVG_PACKET_SIZE = 8; // Average packet size
     public static void main(String[] args) {
         Simulator mario = new Simulator(20, 20.0);
@@ -27,5 +27,6 @@ public class SuperLMP {
         sum=+mario.getSentTime(); // Add the sent times together
         System.out.println("Packets sent successfully: "+mario.getSuccessfulPacketsSent());
         }
+        System.out.println("Calculated throughput is: " + (mario.getSuccessfulPacketsSent() * AVG_PACKET_SIZE * 512) / (SLOT_LIMIT * 51.2 * Math.pow(10, -6))); //Throughput!
 }
 }
