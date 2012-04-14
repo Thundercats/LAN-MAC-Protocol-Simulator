@@ -45,13 +45,13 @@ public class Simulator {
             {
                 packets++;
                 fred.get(j).send(lambda); // Send!
-                if(Math.abs(fred.get(i).getTime()-fred.get(j).getTime())<=1) 
+                if(Math.abs(fred.get(0).getTime()-fred.get(1).getTime())<=1) 
                 {
                     // System.out.println("Collision!"); // Oh noes!
-                    fred.get(j).collide();
-                    fred.get(i).collide();
-                    collision.add(fred.get(j)); // Add to a running list of collisions
-                    collision.add(fred.get(i)); // Add to a running list of collisions
+                    fred.get(0).collide();
+                    fred.get(1).collide();
+                    collision.add(fred.get(0)); // Add to a running list of collisions
+                    collision.add(fred.get(1)); // Add to a running list of collisions
                 }
                 
             }
