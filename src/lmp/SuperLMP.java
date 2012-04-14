@@ -1,6 +1,5 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Like LMP, but super
  */
 package lmp;
 
@@ -14,7 +13,9 @@ public class SuperLMP {
         Simulator mario = new Simulator(20, 20.0);
         result = mario.send();
         if(result==-1)
-            System.out.print("Oh noes!");
+        {
+             System.out.println("Hooray! You sent at time: "+mario.tryAgain());
+        }
         else
             System.out.println("Hooray! You sent at time: "+result);
     }
