@@ -14,7 +14,7 @@ public class SuperLMP {
     public static void main(String[] args) {
         Simulator mario = new Simulator(20, 20.0);
         double sum = 0;
-        while(mario.getSuccessfulPacketsSent() * AVG_PACKET_SIZE <=20000)
+        while(mario.getPacketsSent() * AVG_PACKET_SIZE <= SLOT_LIMIT)
         {
         result = mario.send();
         if(result==-1)
