@@ -10,13 +10,16 @@ package lmp;
 public class SuperLMP {
     public static Double result;
     public static final int SLOT_LIMIT=20000; // Run until this many time slots have passed
-    public static final int AVG_PACKET_SIZE = 512; // Average packet size
+    public static int AVG_PACKET_SIZE = 512; // Average packet size
     public static final double CONVERSION = 0.015625; // The conversion factor to go from bytes -> time slots
+    public static int NUM_OF_STATIONS = 20;
+    public static double lambda = 20.0;
+    
     public static void main(String[] args) {
         int throughAverage=0;
         for(int i=0;i<=50;i++)
         {
-        Simulator mario = new Simulator(20, 20.0);
+        Simulator mario = new Simulator(NUM_OF_STATIONS, lambda);
         double sum = 0;
         while((mario.getPacketsSent() * AVG_PACKET_SIZE * CONVERSION) <= SLOT_LIMIT)
         {
