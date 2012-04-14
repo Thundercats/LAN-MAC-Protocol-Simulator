@@ -16,10 +16,12 @@ public class Simulator {
     private Double lambda;
     private ArrayList collision;
     private int successfulPackets;
+    private int packets;
     private double sentTime;
     
     Simulator(int numOfStations, Double lambda)
     {
+        packets=0;
         sentTime = 0;
         successfulPackets=0; // Counts tne number of packets successfully sent
         fred = new ArrayList(); // Hello fred!
@@ -41,6 +43,7 @@ public class Simulator {
             fred.get(i).send(lambda); // Send!
             for(int j= i+1;j<fred.size();j++)
             {
+                packets++;
                 fred.get(j).send(lambda); // Send!
                 if(Math.abs(fred.get(i).getTime()-fred.get(j).getTime())<=1) 
                 {
@@ -76,6 +79,11 @@ public class Simulator {
     public void clearSuccessfulPacketsSent()
     {
         successfulPackets = 0;
+    }
+    
+    public int getPacketsSent()
+    {
+        return packets;
     }
     
     public double tryAgain()
