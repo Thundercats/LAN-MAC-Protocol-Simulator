@@ -12,6 +12,7 @@ public class Node2 implements Comparable<Node2> {
 	private Double time; //TIME TO SEND
 	private Double lambda;
 	private int collisionCount; // Number of collisions
+        private boolean initilized = false;
 	//new node has no collisions
 	private boolean collided;
 	private Random ran;
@@ -52,8 +53,12 @@ public class Node2 implements Comparable<Node2> {
 	public void send(double aLambda)
 	{
 		collisionCount=0; // Resets the number of collisions. Used for backoff()
-		time += poisson(aLambda);
-		//should we keep a collection of times as well?
+                if(initilized)
+                {
+                    time += poisson(aLambda); //The normal behavior of send
+                }
+                else
+                    initilized=!initilized; // Special condition for the first time it is run
 	}
 
 
