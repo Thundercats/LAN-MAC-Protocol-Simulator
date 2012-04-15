@@ -63,20 +63,20 @@ public class SuperLMP extends JPanel {
         System.out.println("Average throughput is: " + (throughAverage / TIMES_TO_RUN));
         double load = (NUM_OF_STATIONS * AVG_PACKET_SIZE * 8)/(lambda * MICROSECONDS);
         // So is this
-        System.out.println("Traffic load is: " + (NUM_OF_STATIONS * AVG_PACKET_SIZE * 8)/(lambda * MICROSECONDS));
+        System.out.println("Traffic load is: " + (NUM_OF_STATIONS * AVG_PACKET_SIZE * 8)/(lambda * MICROSECONDS)+"\n");
         outPanel.setLayout(new GridLayout(5,1));
         //JPanel tpanel = new JPanel();
         JLabel message1 = new JLabel("Number of Startions is: "+NUM_OF_STATIONS+"\n");
         //tpanel.add(message1, BorderLayout.CENTER);
         //JPanel mpanel = new JPanel();
-        JLabel message2 = new JLabel("Packet Size is                : "+AVG_PACKET_SIZE+"\n");
+        JLabel message2 = new JLabel("Packet Size is                : "+AVG_PACKET_SIZE+" bits\n");
         JLabel message3 = new JLabel("Lambda is                       : "+ lambda +"\n");
-        JLabel message4 = new JLabel("Average throughput is: "+ throughAverage/TIMES_TO_RUN+ "\n");
+        JLabel message4 = new JLabel("Average throughput is: "+ throughAverage/TIMES_TO_RUN+ " bps\n");
         /*mpanel.add(message2, BorderLayout.NORTH);
         mpanel.add(message3, BorderLayout.CENTER);
         mpanel.add(message4, BorderLayout.SOUTH);*/
         //JPanel bpanel = new JPanel();
-        JLabel message5 = new JLabel("Traffic Load is                 : "+load+"\n");
+        JLabel message5 = new JLabel("Traffic Load is                 : "+load+" bps\n");
         //bpanel.add(message5, BorderLayout.CENTER);
         outPanel.add(message1);
         outPanel.add(message2);
