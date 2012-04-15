@@ -3,7 +3,12 @@
  */
 package lmp;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridLayout;
+
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -32,8 +37,8 @@ public class SuperLMP extends JPanel {
         String s4 = JOptionPane.showInputDialog(null, "How many times would you like to run this?");
         TIMES_TO_RUN = Integer.parseInt(s4);
         JFrame frame = new JFrame();
-        JPanel boardPanel = new JPanel();
-        int throughAverage = 0; // Used for calculating average throughput
+        JPanel outPanel = new JPanel();
+        double throughAverage = 0; // Used for calculating average throughput
         for (int i = 1; i <= TIMES_TO_RUN; i++) { // Start at index i=1 to avoid an off-by-one error
             Simulator mario = new Simulator(NUM_OF_STATIONS, lambda);
             double sum = 0; // The summation of sums!
@@ -47,15 +52,40 @@ public class SuperLMP extends JPanel {
 
                 sum = +mario.getSentTime(); // Add the sent times together
                 System.out.println("Packets sent successfully at time " + mario.getSuccessfulPacketsSent());
-            }            
+            }
+            double throughput = (mario.getSuccessfulPacketsSent() * AVG_PACKET_SIZE * 8) / (SLOT_LIMIT * 51.2 * Math.pow(10, -6));
             // Print out the calculated throughput
-            System.out.println("Calculated throughput is: " + (mario.getSuccessfulPacketsSent() * AVG_PACKET_SIZE * 8) / (SLOT_LIMIT * 51.2 * Math.pow(10, -6))); //Throughput!
+            System.out.println("Calculated throughput is: " + throughput); //Throughput!
             // Calculate the average throuput
-            throughAverage += (mario.getSuccessfulPacketsSent() * 8 * AVG_PACKET_SIZE) / (SLOT_LIMIT * 51.2 * Math.pow(10, -6));
+            throughAverage += (double)(mario.getSuccessfulPacketsSent() * 8.0 * AVG_PACKET_SIZE) / (SLOT_LIMIT * 51.2 * Math.pow(10, -6));
         }
         // I think this is obvious
         System.out.println("Average throughput is: " + (throughAverage / TIMES_TO_RUN));
+        double load = (NUM_OF_STATIONS * AVG_PACKET_SIZE * 8)/(lambda * MICROSECONDS);
         // So is this
         System.out.println("Traffic load is: " + (NUM_OF_STATIONS * AVG_PACKET_SIZE * 8)/(lambda * MICROSECONDS));
+        outPanel.setLayout(new GridLayout(5,1));
+        //JPanel tpanel = new JPanel();
+        JLabel message1 = new JLabel("Number of Startions is: "+NUM_OF_STATIONS+"\n");
+        //tpanel.add(message1, BorderLayout.CENTER);
+        //JPanel mpanel = new JPanel();
+        JLabel message2 = new JLabel("Packet Size is                : "+AVG_PACKET_SIZE+"\n");
+        JLabel message3 = new JLabel("Lambda is                       : "+ lambda +"\n");
+        JLabel message4 = new JLabel("Average throughput is: "+ throughAverage/TIMES_TO_RUN+ "\n");
+        /*mpanel.add(message2, BorderLayout.NORTH);
+        mpanel.add(message3, BorderLayout.CENTER);
+        mpanel.add(message4, BorderLayout.SOUTH);*/
+        //JPanel bpanel = new JPanel();
+        JLabel message5 = new JLabel("Traffic Load is                 : "+load+"\n");
+        //bpanel.add(message5, BorderLayout.CENTER);
+        outPanel.add(message1);
+        outPanel.add(message2);
+        outPanel.add(message3);
+        outPanel.add(message4);
+        outPanel.add(message5);
+        frame.add(outPanel);
+        frame.setSize(300, 300);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
