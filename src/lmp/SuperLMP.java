@@ -69,7 +69,7 @@ public class SuperLMP extends JPanel {
         JLabel message1 = new JLabel("Number of Startions is: "+NUM_OF_STATIONS+"\n");
         //tpanel.add(message1, BorderLayout.CENTER);
         //JPanel mpanel = new JPanel();
-        JLabel message2 = new JLabel("Packet Size is                : "+AVG_PACKET_SIZE+" bits\n");
+        JLabel message2 = new JLabel("Packet Size is                : "+AVG_PACKET_SIZE+" bytes\n");
         JLabel message3 = new JLabel("Lambda is                       : "+ lambda +"\n");
         JLabel message4 = new JLabel("Average throughput is: "+ throughAverage/TIMES_TO_RUN+ " bps\n");
         /*mpanel.add(message2, BorderLayout.NORTH);
