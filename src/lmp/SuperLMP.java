@@ -26,7 +26,9 @@ public class SuperLMP extends JPanel {
     public static double MICROSECONDS = 51.2;
     public static double lambda = 20.0;
     public static int TIMES_TO_RUN = 1; // The times to run. If more than one, it will average the values
-
+    public static double sum;
+    public static Simulator mario;
+    
     public static void main(String[] args) {
         String s1 = JOptionPane.showInputDialog(null, "Enter the number of stations");
         NUM_OF_STATIONS = Integer.parseInt(s1);
@@ -40,8 +42,8 @@ public class SuperLMP extends JPanel {
         JPanel outPanel = new JPanel();
         double throughAverage = 0; // Used for calculating average throughput
         for (int i = 1; i <= TIMES_TO_RUN; i++) { // Start at index i=1 to avoid an off-by-one error
-            Simulator mario = new Simulator(NUM_OF_STATIONS, lambda);
-            double sum = 0; // The summation of sums!
+            mario = new Simulator(NUM_OF_STATIONS, lambda);
+            sum = 0; // The summation of sums!
             while ((mario.getPacketsSent() * AVG_PACKET_SIZE * CONVERSION) <= SLOT_LIMIT) {
                 result = mario.send(); // Do an initial send. If it fails, tryAgain(), else, hooray!
                 if (result == -1) {
@@ -77,14 +79,18 @@ public class SuperLMP extends JPanel {
         mpanel.add(message4, BorderLayout.SOUTH);*/
         //JPanel bpanel = new JPanel();
         JLabel message5 = new JLabel("Traffic Load is                 : "+load+" bps\n");
+        
+        JLabel message6 = new JLabel("Average delay is: " + sum/mario.getSuccessfulPacketsSent());
+
         //bpanel.add(message5, BorderLayout.CENTER);
         outPanel.add(message1);
         outPanel.add(message2);
         outPanel.add(message3);
         outPanel.add(message4);
         outPanel.add(message5);
+        outPanel.add(message6);
         frame.add(outPanel);
-        frame.setSize(300, 300);
+        frame.setSize(500, 300);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
